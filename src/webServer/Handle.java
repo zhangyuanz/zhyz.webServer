@@ -1,8 +1,5 @@
 package webServer;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Handle implements Runnable {
@@ -14,23 +11,14 @@ public class Handle implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			handleRequest();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		handleRequest();	
 	}
 
-	private void handleRequest() throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		String line = null;
-		while ((line = in.readLine()) != null) {
-			System.out.println("客服端请求的数据是：" + line);
-			if (line.equals(""))
-				break;
+	private void handleRequest(){
+		RequestAnalyze request = new RequestAnalyze(clientSocket);
+		if(!request.getMethod().equals("GET")){
+			//outNotGet();
 		}
-		in.close();
-		clientSocket.close();
 
 	}
 }
