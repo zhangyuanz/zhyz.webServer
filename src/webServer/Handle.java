@@ -28,17 +28,16 @@ public class Handle implements Runnable {
 			return;
 		}
 		
-		String url = request.getRequestURL();
-		System.out.println("封装的url："+url);
+		String requesturl = request.getRequestURL();
+		System.out.println("封装的url："+requesturl);
 		// 非D盘
-		String disk = url.substring(1, 2);
+		String disk = requesturl.substring(1, 2);
 		System.out.println("disk："+disk);
 		if ((!disk.equals("d"))&&(!disk.equals("D"))) {
 			response.outNoPower();
 			return;
 		}else{
-			String gen = "D:/";//根目录，可由配置信息读取过来，此处暂时直接写出来
-			String path = gen + url.substring(3, url.length());
+			String path = toPath(requesturl);
 			System.out.println("访问路劲:"+path);
 			File file = new File(path);
 			// 只是一个目录
@@ -65,6 +64,26 @@ public class Handle implements Runnable {
 				}
 			}
 		}
+	}
+	/**
+	 * 将一个URL转换为路径，加以限制条件
+	 * 
+	 * @param url 可
+	 */
+	private String toPath(String url){
+		String gen = "D:/";//根目录，可由配置信息读取过来，此处暂时直接写出来
+		String path = null;
+		if(url == null){
+			path = gen ;
+		}
+		if(url.startsWith("/d")||url.startsWith("/D")){
+			path = gen + url.substring(2, url.length());
+		}
+		if(url.startsWith("/d/")||url.startsWith("/D/")){
+			path = gen + url.substring(3, url.length());
+		}
+		return path;
+		
 	}
 	/**
 	 * 判断文件是否为静态文件
