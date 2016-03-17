@@ -14,15 +14,14 @@ public class RequestAnalyze {
 	//以下属性只提供getter方法不提供setter方法
 	private String method = null;// 请求方法  
     private String protocol = null;// 协议版本  
-    private String requestURI = null;//请求的URI地址  在HTTP请求的第一行的请求方法后面  
+    private String requestURL = null;//请求的URI地址  在HTTP请求的第一行的请求方法后面  
     private String fileType = null;
     
     private String host = null;//请求的主机信息  
     private String connection = null;//Http请求连接状态信息 对应HTTP请求中的Connection  
     private String agent = null;// 代理，用来标识代理的浏览器信息 ,对应HTTP请求中的User-Agent:  
     private String language = null;//对应Accept-Language  
-    private String encoding = null;//请求的编码方式  对应HTTP请求中的Accept-Encoding  
-    private String charset = null;//请求的字符编码  对应HTTP请求中的Accept-Charset  
+    private String encoding = null;//请求的编码方式  对应HTTP请求中的Accept-Encoding    
     private String accept = null;// 对应HTTP请求中的Accept;  
     
     private String paramers = null;
@@ -61,14 +60,21 @@ public class RequestAnalyze {
 		analyzeFirstLine(firstLine);
 		
 		String headLine = null;
-		while((headLine = in.readLine()) != null){
+		for(int i = 0;i < 8;i ++){
+			headLine = in.readLine();
+			System.out.println("headLine:"+headLine);
 			analyzeHeadLine(headLine);
+			if(headLine == "\n\r"){
+				break;
+			}
+			if(headLine.startsWith("Connection")){
+				break;
+			}
 		}
+		System.out.println("处理完请求头了");
+		//String lastLine = in.readLine();
+		//analyzeLastLine(lastLine);
 		
-		String lastLine = in.readLine();
-		analyzeLastLine(lastLine);
-		
-		in.close();
 	}
 	/**
 	 * 解析http请求的请求行信息
@@ -79,7 +85,9 @@ public class RequestAnalyze {
 		int x = firstLine.indexOf('/');
 		int y = firstLine.lastIndexOf('/');
 		method = firstLine.substring(0,x-1);
-		requestURI = firstLine.substring(x,y-5);
+		System.out.println("请求方法是:"+method);
+		requestURL = firstLine.substring(x,y-5);
+		System.out.println("请求URI是:"+requestURL);
 		protocol = firstLine.substring(y-4, firstLine.length());
 	}
 	/**
@@ -91,21 +99,23 @@ public class RequestAnalyze {
 		int max =headLine.length();
 		if(headLine.startsWith("Host")){
 			host = headLine.substring(6,max);
+			System.out.println("请求的主机是:"+host);
 		}
 		if(headLine.startsWith("User-Agent")){
 			agent = headLine.substring(12,max);
+			System.out.println("代理："+agent);
 		}
-		if(headLine.startsWith("Accept")){
+		if(headLine.startsWith("Accept:")){
 			accept = headLine.substring(8,max);
+			System.out.println("接受的类型："+accept);
 		}
 		if(headLine.startsWith("Accept-Language")){
 			language = headLine.substring(17,max);
+			System.out.println("接受的语言:"+language);
 		}
 		if(headLine.startsWith("Accept-Encoding")){
 			encoding = headLine.substring(17,max);
-		}
-		if(headLine.startsWith("Accept-Charset")){
-			charset = headLine.substring(16,max);
+			System.out.println("接受的编码:"+encoding);
 		}
 	}
 	/**
@@ -158,14 +168,14 @@ public class RequestAnalyze {
 	/**
 	 * @return the requestURI
 	 */
-	public String getRequestURI() {
-		return requestURI;
+	public String getRequestURL() {
+		return requestURL;
 	}
 	/**
 	 * @param requestURI the requestURI to set
 	 */
-	public void setRequestURI(String requestURI) {
-		this.requestURI = requestURI;
+	public void setRequestURL(String requestURL) {
+		this.requestURL = requestURL;
 	}
 	/**
 	 * @return the connection
@@ -227,18 +237,7 @@ public class RequestAnalyze {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	/**
-	 * @return the charset
-	 */
-	public String getCharset() {
-		return charset;
-	}
-	/**
-	 * @param charset the charset to set
-	 */
-	public void setCharset(String charset) {
-		this.charset = charset;
-	}
+
 	/**
 	 * @return 
 	 */

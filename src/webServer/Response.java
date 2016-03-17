@@ -1,5 +1,6 @@
 package webServer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -38,6 +39,7 @@ public class Response {
 	private void setClientSocket(Socket clientSocket) {
 		this.clientSocket = clientSocket;
 	}
+
 	/**
 	 * 向客服端反馈请求方法不接受的信息
 	 * 
@@ -46,6 +48,7 @@ public class Response {
 		pw.println("HTTP/1.1 405 Method Not Allowed");
 		pw.println();
 	}
+
 	/**
 	 * 响应文件类型不支持信息
 	 */
@@ -62,6 +65,7 @@ public class Response {
 		pw.println("HTTP/1.1 403 Forbidden");
 		pw.println();
 	}
+
 	/**
 	 * 向客服端反馈资源找不到信息
 	 * 
@@ -70,25 +74,44 @@ public class Response {
 		pw.println("HTTP/1.1 404 Not Found");
 		pw.println();
 	}
+
 	/**
 	 * 向客服端反馈不支持的版本协议
 	 * 
 	 */
-	public void outNotSupportVersion(){
+	public void outNotSupportVersion() {
 		pw.println("HTTP/1.1 505 Version Not Supported ");
 		pw.println();
 	}
+
 	/**
 	 * 向客服端反馈请求的目录下的列表文件
 	 * 
 	 */
-	public void outFileList() {
+	public void outFileList(File file) {
+		System.out.println("开始处理的filePath：" + file.getPath());
+		System.out.println("开始处理的fileName：" + file.getName());
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
 		pw.println();
+		pw.println("您好！您访问的目录下的所有文件如下:<br>");
+		pw.println("<a href='javascript:history.go(-1)'>返回上级</a><br>");
+		for (String str : file.list()) {
+			String path = file.getPath();
+			int len = path.length();
+			String href = "D:/";
+			if (path.equals("D:/")) {
+				href = "D:/" + str;
+			} else {
+				href = path.substring(3, len).replace("\\", "/") + "/" + str;
+			}
+			pw.println("<a href='" + href + "'>" + str + "</a><br>");
+			// pw.println(str+"<br>");//拓展为有超链接的，点击可直接下载
+		}
+		pw.close();
 	}
 
-	public void outFile() {
+	public void outFile(File file) {
 	}
 
 	public void outPreviewFile() {
