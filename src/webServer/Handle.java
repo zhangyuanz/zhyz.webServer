@@ -1,6 +1,7 @@
 package webServer;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Handle implements Runnable {
@@ -55,7 +56,11 @@ public class Handle implements Runnable {
 					} else {
 						//if(预览参数为ture) 输入预览信息outPreview
 						//否则输入下载信息outFile
-						response.outFile(file);
+						try {
+							response.outFile(file);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}

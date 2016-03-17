@@ -1,6 +1,8 @@
 package webServer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -112,7 +114,27 @@ public class Response {
 		pw.close();
 	}
 
-	public void outFile(File file) {
+	public void outFile(File file) throws IOException {
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:application/x-msdownload;charset=UTF-8");
+		pw.println();
+		//打开此文件，将类容写入socket输出流
+		FileInputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			byte[] bytes = new byte[4096];
+			while( in.read(bytes) != -1){
+				System.out.println("读取的内容是："+new String(bytes));
+				pw.println(new String(bytes));
+			}
+			pw.println();
+		} catch (FileNotFoundException e) {		
+			e.printStackTrace();
+		}finally{
+			if(pw!=null){
+				pw.close();	
+			}		
+		}
 	}
 
 	public void outPreviewFile() {
