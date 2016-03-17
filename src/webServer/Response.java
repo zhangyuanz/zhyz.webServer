@@ -97,16 +97,17 @@ public class Response {
 		pw.println("您好！您访问的目录下的所有文件如下:<br>");
 		pw.println("<a href='javascript:history.go(-1)'>返回上级</a><br>");
 		for (String str : file.list()) {
-			String path = file.getPath();
-			int len = path.length();
-			String href = "D:/";
-			if (path.equals("D:/")) {
-				href = "D:/" + str;
-			} else {
-				href = path.substring(3, len).replace("\\", "/") + "/" + str;
-			}
-			pw.println("<a href='" + href + "'>" + str + "</a><br>");
-			// pw.println(str+"<br>");//拓展为有超链接的，点击可直接下载
+			
+			String gen = "D:/";
+			String href = gen ;
+			if(str.indexOf('.')<0){
+				href = str +  "/";
+				pw.println("<a href='" + href + "'><font color = 'red'>" + str + "</font></a><br>");
+			}else{
+				href = str;
+				pw.println("<a href='" + href + "'>" + str + "</a><br>");
+			}			
+			//拓展为有超链接的，点击可直接下载
 		}
 		pw.close();
 	}
