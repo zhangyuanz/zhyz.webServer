@@ -55,10 +55,9 @@ public class Response {
 	 */
 	public void outFile(File file) {
 		pw.println("HTTP/1.1 200 OK");
-		//pw.println("Content-Type:application/x-msdownload;charset=UTF-8");
 		pw.println("Content-Disposition:attachment;filename="+file.getName());
 		pw.println("Content-Type:application/octet-stream;charset=UTF-8");
-		//pw.println("Content-Type:text/plain;charset=UTF-8");
+		pw.println("Content-Length:"+file.length());
 		pw.println();
 		try {
 			new FileOperator().file2Socket(file, clientSocket);
@@ -104,6 +103,7 @@ public class Response {
 	public void outNotGet() {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
 		pw.println(" 405 Method Not Allowed");
 		pw.println();
 		pw.close();
@@ -115,6 +115,7 @@ public class Response {
 	public void outIllegalType() {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
 		pw.println(" 404 Not Supported fileType");
 		pw.println();
 		pw.close();
@@ -127,6 +128,7 @@ public class Response {
 	public void outNoPower() {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
 		pw.println(" 403 Forbidden");
 		pw.println();
 		pw.close();
@@ -152,7 +154,8 @@ public class Response {
 	public void outNotSupportVersion() {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
-		pw.println("HTTP/1.1 505 Version Not Supported ");
+		pw.println();
+		pw.println(" 505 Version Not Supported ");
 		pw.println();
 		pw.close();
 	}
