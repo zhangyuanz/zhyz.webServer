@@ -15,8 +15,10 @@ public class URL {
 	 * 获得URL对应的字符串
 	 * @return
 	 */
-	public String getUrl(){
-		return this.url;
+	public String getString(){
+		if(url != null)
+			return url.substring(1,url.length());
+		return null;
 	}
 	/**
 	 * 获得url请求的资源根目录
@@ -24,9 +26,30 @@ public class URL {
 	 */
 	public String getRoot(){
 		if(url != null)
-			return url.substring(1, 2);
+			if(url.length() >= 2)
+				return url.substring(1, 2);
+			else//默认根
+				return Config.ROOT;
 		return null;
 	}
-	
+	/**
+	 * 将一个URL转换为Windows能够识别的路劲 并允许用户输入如果是空，即只输入主机ip，则访问默认跟目录，如果是根目录没有添加“/”自动添加
+	 * 
+	 * <pre>
+	 * null =  "d:/"
+	 * 或者/ = "d:/"
+	 * /d = "d:/"
+	 * /d/ = "d:/"
+	 * /d/user = "d:/user"
+	 * </pre>
+	 * 
+	 * @param url是http请求经过封装的url
+	 */
+	public String toPath() {
+		if (this.url == null || this.getString().equals(Config.ROOT)) {
+			return Config.ROOT_PATH;
+		}
+		return Config.ROOT_PATH + url.substring(3, url.length());
+	}
 }
 

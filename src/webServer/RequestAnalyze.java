@@ -95,11 +95,11 @@ public class RequestAnalyze {
 		int x = firstLine.indexOf('/');
 		int y = firstLine.lastIndexOf('/');
 		method = firstLine.substring(0, x - 1);
-		logger.info("请求方法是:" + method);
+	
 		requestURL = new URL(firstLine.substring(x, y - 5));
-		logger.info("请求URI是:" + requestURL);
+	
 		protocol = firstLine.substring(y - 4, firstLine.length());
-		logger.info("请求协议是:" + protocol);
+		
 	}
 
 	/**

@@ -2,6 +2,7 @@ package webServer;
 
 import java.io.File;
 import java.net.Socket;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,26 +42,25 @@ public class Handle implements Runnable {
 			return;
 		}
 
+		
 		URL requesturl = request.getRequestURL();
-		logger.info("封装的url：" + requesturl);
-		if (requesturl == null || requesturl.getUrl()) {
-			// 输入空路径，默认显示d盘目录,或者忘记末尾/自动添加
-			response.outFileList(new File(Config.ROOT));
+		if (requesturl == null) {
+			logger.info("请求的url是null！");
+			response.outFileList(new File(Config.ROOT_PATH));
 			return;
 		}
-		if (requesturl.equals("/" + Config.SERVER_ID)) {
-			response.outFile(new File(Config.ROOT + Config.SERVER_ID));
+		if (requesturl.getString().equals(Config.SERVER_TAG)) {
+			response.outFile(new File(Config.ROOT_PATH + Config.SERVER_TAG));
 			return;
 		}
-		// 非D盘
-		String disk = requesturl.substring(1, 2);
-		logger.info("disk：" + disk);
-		if (!disk.equals(Config.DISK)) {
-			logger.info("访问非D盘");
+		
+		// 非根目录,没有访问权限
+		if (!requesturl.getRoot().equals(Config.ROOT)) {
+			logger.info("用户试图访问非根目录资源");
 			response.outNoPower();
 			return;
 		} else {
-			String path = URLtoPath(requesturl);
+			String path = requesturl.toPath();
 			logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
 			File file = new File(path);
 			// 只是一个目录
@@ -82,25 +82,6 @@ public class Handle implements Runnable {
 				}
 			}
 		}
-	}
-
-	/**
-	 * 将一个URL转换为Windows能够识别的路劲 并允许用户输入如果是空，即只输入主机ip，则访问默认跟目录，如果是根目录没有添加“/”自动添加
-	 * 
-	 * <pre>
-	 * null =  "d:/"
-	 * /d = "d:/"
-	 * /d/ = "d:/"
-	 * /d/user = "d:/user"
-	 * </pre>
-	 * 
-	 * @param url是http请求经过封装的url
-	 */
-	private String URLtoPath(String url) {
-		if (url.isEmpty() || url.equals("/")) {
-			return Config.ROOT;
-		}
-		return Config.ROOT + url.substring(3, url.length());
 	}
 
 	/**
