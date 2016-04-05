@@ -76,6 +76,7 @@ public class Handle implements Runnable {
 					logger.info("访问的文件不存在");
 					response.outNotExist();
 				} else {
+					//html页面，图片文件，则提供预览，静态文件提供下载，否则非法类型
 					if (contain(Config.PAGES, file.getName())) {
 						response.outFilePrivew(file);
 					} else if (!contain(Config.STATIC_FILES, file.getName())) {
@@ -96,7 +97,7 @@ public class Handle implements Runnable {
 	 * @return
 	 */
 	private boolean contain(String[] fileLastNames, String str) {
-		String lastName = str.substring(str.indexOf(".") + 1, str.length());
+		String lastName = str.substring(str.lastIndexOf('.') + 1, str.length());
 		logger.info("文件后缀名为：" + lastName);
 		for (String temp : fileLastNames) {
 			if (temp.equals(lastName)) {

@@ -88,7 +88,7 @@ public class Response {
 			}		
 		}
 	}
-	
+	//public void
 	
 	/**
 	 * 像客服端提供请求资源的预览流
