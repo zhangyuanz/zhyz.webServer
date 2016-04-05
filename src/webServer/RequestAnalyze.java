@@ -77,9 +77,7 @@ public class RequestAnalyze {
 				break;
 			}
 		}
-		
-		// String lastLine = in.readLine();
-		//analyzeLastLine(lastLine);
+
 		logger.info("请求已封装完成");
 	}
 
@@ -132,15 +130,7 @@ public class RequestAnalyze {
 		}else{}
 		return str;
 	}
-	/**
-	 * 解析http请求的附加参数
-	 * 
-	 * @param lastLine
-	 */
-	private void analyzeLastLine(String lastLine) {
-
-	}
-
+	
 	
 	
 	

@@ -68,7 +68,25 @@ public class Response {
 		}
 	}
 	
-	
+	/**
+	 * 为客服端提供请求的文件的预览
+	 * 
+	 * @param file 是请求的资源
+	 * @throws IOException
+	 */
+	public void outFilePrivew(File file) {
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
+		try {
+			new FileOperator().file2Socket(file, clientSocket);
+			pw.println();
+		}finally{
+			if(pw!=null){
+				pw.close();	
+			}		
+		}
+	}
 	
 	
 	/**
@@ -82,7 +100,9 @@ public class Response {
 	 * 
 	 */
 	public void outNotGet() {
-		pw.println("HTTP/1.1 405 Method Not Allowed");
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println(" 405 Method Not Allowed");
 		pw.println();
 		pw.close();
 	}
@@ -91,7 +111,9 @@ public class Response {
 	 * 向客服端反应文件类型不支持的信息
 	 */
 	public void outIllegalType() {
-		pw.println("HTTP/1.1 404 Not Supported fileType");
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println(" 404 Not Supported fileType");
 		pw.println();
 		pw.close();
 	}
@@ -101,7 +123,9 @@ public class Response {
 	 * 
 	 */
 	public void outNoPower() {
-		pw.println("HTTP/1.1 403 Forbidden");
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println(" 403 Forbidden");
 		pw.println();
 		pw.close();
 	}
@@ -111,7 +135,10 @@ public class Response {
 	 * 
 	 */
 	public void outNotExist() {
-		pw.println("HTTP/1.1 404 Not Found");
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
+		pw.println(" 404 Not Found");
 		pw.println();
 		pw.close();
 	}
@@ -121,6 +148,8 @@ public class Response {
 	 * 
 	 */
 	public void outNotSupportVersion() {
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
 		pw.println("HTTP/1.1 505 Version Not Supported ");
 		pw.println();
 		pw.close();
