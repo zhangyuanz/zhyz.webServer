@@ -9,6 +9,8 @@ import java.net.URLDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import util.URL;
+
 /**
  * 将http请求信息封装打包，以便后续使用
  * 

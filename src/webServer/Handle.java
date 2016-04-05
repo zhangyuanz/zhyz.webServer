@@ -6,6 +6,8 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import util.URL;
+
 /**
  * 该类是完成逻辑控制，业务流程处理，实现runable接口，专门执行逻辑任务
  * 
@@ -49,6 +51,7 @@ public class Handle implements Runnable {
 			response.outFileList(new File(Config.ROOT_PATH));
 			return;
 		}
+		logger.info("请求的URL：/"+requesturl.getString());
 		if (requesturl.getString().equals(Config.SERVER_TAG)) {
 			response.outFile(new File(Config.ROOT_PATH + Config.SERVER_TAG));
 			return;
@@ -73,8 +76,9 @@ public class Handle implements Runnable {
 					logger.info("访问的文件不存在");
 					response.outNotExist();
 				} else {
-					// 非静态文件
-					if (!contain(Config.STATIC_FILES, file.getName())) {
+					if (contain(Config.PAGES, file.getName())) {
+						response.outFilePrivew(file);
+					} else if (!contain(Config.STATIC_FILES, file.getName())) {
 						response.outIllegalType();
 					} else {
 						response.outFile(file);

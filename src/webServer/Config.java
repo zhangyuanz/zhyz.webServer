@@ -15,11 +15,9 @@ public class Config {
 	public static final String SERVER_TAG = "favicon.ico";
 	//服务器判断允许访问的文件类型
 	public static final String[] STATIC_FILES = 
-		{"jpg","png","txt","doc","docx","xls","pdf","ini","xml","html","zip","rar",
-		"JPG","PNG","TXT","DOC","DOCX","XLS","PDF","INI","XML","HTML","ZIP","RAR"};
-	/**
-	 * 测试通过的文件类型：txt,xsl,ini,xml,zip
-	 * isuess：存在乱码问题
-	 */
+		{ "jpg", "png", "txt", "doc", "docx", "xls", "pdf", "ini", "xml", "zip", "rar",
+			"JPG", "PNG",	"TXT", "DOC", "DOCX", "XLS", "PDF", "INI", "XML", "ZIP", "RAR" };
+	//可以直至预览的文件
+	public static final String[] PAGES = { "html", "HTML", "html5", "HTML5" };
 	
 }

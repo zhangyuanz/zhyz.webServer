@@ -1,4 +1,6 @@
-package webServer;
+package util;
+
+import webServer.Config;
 
 /**
  * URL是一种特殊的字符串，定义以表示却别，同时提供相关方法，方便操作

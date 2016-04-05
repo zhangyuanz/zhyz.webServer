@@ -1,4 +1,4 @@
-package webServer;
+package util;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -33,6 +33,7 @@ public class FileOperator {
 			while( in.read(bytes) != -1){
 				dis.write(bytes);
 			}
+			logger.info("读取完毕！");
 		} catch (FileNotFoundException e) {
 			logger.info("文件未找到异常"+e.getLocalizedMessage());
 		} catch (IOException e){
