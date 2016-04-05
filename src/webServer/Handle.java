@@ -72,16 +72,7 @@ public class Handle implements Runnable {
 	 */
 	private String toPath(String url){
 		String gen = "D:/";//根目录，可由配置信息读取过来，此处暂时直接写出来
-		String path = null;
-		if(url == null){
-			path = gen ;
-		}
-		if(url.startsWith("/d")||url.startsWith("/D")){
-			path = gen + url.substring(2, url.length());
-		}
-		if(url.startsWith("/d/")||url.startsWith("/D/")){
-			path = gen + url.substring(3, url.length());
-		}
+		String path = gen + url.substring(3, url.length());
 		return path;
 		
 	}
