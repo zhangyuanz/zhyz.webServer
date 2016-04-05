@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +26,10 @@ public class RequestAnalyze {
 	private String protocol = null;// 协议版本
 	private URL requestURL = null;// 请求的URI地址 在HTTP请求的第一行的请求方法后面
 
-	private String host = null;// 请求的主机信息
-	private String connection = null;// Http请求连接状态信息 对应HTTP请求中的Connection
-	private String agent = null;// 代理，用来标识代理的浏览器信息 ,对应HTTP请求中的User-Agent:
-	private String language = null;// 对应Accept-Language
-	private String encoding = null;// 请求的编码方式 对应HTTP请求中的Accept-Encoding
-	private String accept = null;// 对应HTTP请求中的Accept;
+	private Map<String, String> head = new HashMap<String, String>();
 
-	private String paramers = null;
-	
+	//private String body = null;
+
 	/**
 	 * 默认构造函数
 	 */
@@ -49,7 +46,7 @@ public class RequestAnalyze {
 		try {
 			this.analyze(clientsocket);
 		} catch (IOException e) {
-			logger.info("请求信息封装失败！"+e.getLocalizedMessage());
+			logger.info("请求信息封装失败！" + e.getLocalizedMessage());
 		}
 	}
 
@@ -62,11 +59,12 @@ public class RequestAnalyze {
 	 */
 	private void analyze(Socket clientSocket) throws IOException {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(),"UTF-8"));
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				clientSocket.getInputStream(), "UTF-8"));
 		logger.info("开始封装客服端请求了...");
 		String firstLine = in.readLine();// 请求行
-		logger.info("firstLine:"+firstLine);
-		if(firstLine == null)
+		logger.info("firstLine:" + firstLine);
+		if (firstLine == null)
 			return;
 		firstLine = URLDecoder.decode(firstLine, "UTF-8");
 		analyzeFirstLine(firstLine);
@@ -82,6 +80,16 @@ public class RequestAnalyze {
 
 		logger.info("请求已封装完成");
 	}
+	/**
+	 * 解析http请求头信息
+	 * 
+	 * @param headLine
+	 */
+	void analyzeHeadLine(String headLine) {
+		String key = headLine.substring(0, headLine.indexOf(':'));
+		String value = headLine.substring(headLine.indexOf(':'+2), headLine.length());
+		head.put(key, value);
+	}
 
 	/**
 	 * 解析http请求的请求行信息
@@ -89,78 +97,14 @@ public class RequestAnalyze {
 	 * @param firstLine
 	 */
 	void analyzeFirstLine(String firstLine) {
-		if(firstLine == null){
+		if (firstLine == null) {
 			return;
 		}
-		int x = firstLine.indexOf('/');
-		int y = firstLine.lastIndexOf('/');
-		method = firstLine.substring(0, x - 1);
-	
-		requestURL = new URL(firstLine.substring(x, y - 5));
-	
-		protocol = firstLine.substring(y - 4, firstLine.length());
-		
+		String sps[] = firstLine.split(" ");
+		setMethod(sps[0]);
+		setRequestURL(new URL(sps[1]));
+		setProtocol(sps[2]);
 	}
-
-	/**
-	 * 解析http请求头信息
-	 * 
-	 * @param headLine
-	 */
-	private void analyzeHeadLine(String headLine) {
-		logger.info("HeadLine内容："+headLine);
-		if(headLine == null){
-			return;
-		}
-		host = cut(host,headLine,"Host:");
-		agent = cut(agent,headLine,"User-Agent:");
-		accept = cut(accept,headLine,"Accept:");
-		language  = cut(language,headLine,"Accept-Language:");
-		encoding = cut(encoding,headLine,"Accept-Encoding:");
-		connection = cut(connection,headLine,"Connection:");
-		
-	}
-	/**
-	 * 截取字符串中关键字以后字符串
-	 * @param line
-	 * @param key
-	 * @return
-	 */
-	private String cut(String str,String line,String key){
-		if(line.startsWith(key)){
-			return line.substring(line.indexOf(":")+2, line.length());
-		}else{}
-		return str;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// 一下是封装信息的getter和setter方法
 
 	/**
 	 * @return the method
@@ -170,8 +114,7 @@ public class RequestAnalyze {
 	}
 
 	/**
-	 * @param method
-	 *            the method to set
+	 * @param method the method to set
 	 */
 	public void setMethod(String method) {
 		this.method = method;
@@ -185,123 +128,44 @@ public class RequestAnalyze {
 	}
 
 	/**
-	 * @param protocol
-	 *            the protocol to set
+	 * @param protocol the protocol to set
 	 */
 	public void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
 
 	/**
-	 * @return the requestURI
+	 * @return the requestURL
 	 */
 	public URL getRequestURL() {
 		return requestURL;
 	}
 
-
 	/**
-	 * @return the connection
+	 * @param requestURL the requestURL to set
 	 */
-	public String getConnection() {
-		return connection;
+	public void setRequestURL(URL requestURL) {
+		this.requestURL = requestURL;
 	}
+	
 
 	/**
-	 * @param connection
-	 *            the connection to set
-	 */
-	public void setConnection(String connection) {
-		this.connection = connection;
-	}
-
-	/**
-	 * @return the host
-	 */
-	public String getHost() {
-		return host;
-	}
-
-	/**
-	 * @param host
-	 *            the host to set
-	 */
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	/**
-	 * @return the agent
-	 */
-	public String getAgent() {
-		return agent;
-	}
-
-	/**
-	 * @param agent
-	 *            the agent to set
-	 */
-	public void setAgent(String agent) {
-		this.agent = agent;
-	}
-
-	/**
-	 * @return the encoding
-	 */
-	public String getEncoding() {
-		return encoding;
-	}
-
-	/**
-	 * @param encoding
-	 *            the encoding to set
-	 */
-	public void setEncoding(String encoding) {
-		this.encoding = encoding;
-	}
-
-	/**
-	 * @return the language
-	 */
-	public String getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @param language
-	 *            the language to set
-	 */
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	/**
+	 * 截取字符串中关键字以后字符串
+	 * 
+	 * @param line
+	 * @param key
 	 * @return
 	 */
-	public String getParamers() {
-		return paramers;
+	/*
+	private String cut(String str, String line, String key) {
+		if (line.startsWith(key)) {
+			return line.substring(line.indexOf(":") + 2, line.length());
+		} else {
+		}
+		return str;
 	}
+	*/
 
-	/**
-	 * @param paramers
-	 */
-	public void setParam(String paramers) {
-		this.paramers = paramers;
-	}
-
-	/**
-	 * @return the accept
-	 */
-	public String getAccept() {
-		return accept;
-	}
-
-	/**
-	 * @param accept
-	 *            the accept to set
-	 */
-	public void setAccept(String accept) {
-		this.accept = accept;
-	}
+	
 
 }

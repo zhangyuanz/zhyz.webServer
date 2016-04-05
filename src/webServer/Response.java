@@ -1,6 +1,5 @@
 package webServer;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,13 +25,11 @@ public class Response {
 		try {
 			pw = new PrintStream(clsk.getOutputStream(), true);
 		} catch (IOException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			logger.info("创建socket输出流异常！");
 		}
 	}
 
-	
-	
 	/**
 	 * 向客服端反馈请求的目录下的列表文件
 	 * 
@@ -47,32 +44,35 @@ public class Response {
 		new FileOperator().fileList2Socket(file, pw);
 		pw.close();
 	}
+
 	/**
 	 * 为客服端提供请求的文件的下载流
 	 * 
-	 * @param file 是请求的资源
+	 * @param file
+	 *            是请求的资源
 	 * @throws IOException
 	 */
 	public void outFile(File file) {
 		pw.println("HTTP/1.1 200 OK");
-		pw.println("Content-Disposition:attachment;filename="+file.getName());
+		pw.println("Content-Disposition:attachment;filename=" + file.getName());
 		pw.println("Content-Type:application/octet-stream;charset=UTF-8");
-		pw.println("Content-Length:"+file.length());
+		pw.println("Content-Length:" + file.length());
 		pw.println();
 		try {
 			new FileOperator().file2Socket(file, clientSocket);
 			pw.println();
-		}finally{
-			if(pw!=null){
-				pw.close();	
-			}		
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
 		}
 	}
-	
+
 	/**
 	 * 为客服端提供请求的文件的预览
 	 * 
-	 * @param file 是请求的资源
+	 * @param file
+	 *            是请求的资源
 	 * @throws IOException
 	 */
 	public void outFilePrivew(File file) {
@@ -82,20 +82,21 @@ public class Response {
 		try {
 			new FileOperator().file2Socket(file, clientSocket);
 			pw.println();
-		}finally{
-			if(pw!=null){
-				pw.close();	
-			}		
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
 		}
 	}
-	//public void
-	
+
+	// public void
+
 	/**
 	 * 像客服端提供请求资源的预览流
 	 */
 	public void outPreviewFile() {
 	}
-	
+
 	/**
 	 * 向客服端反馈请求方法不对的信息
 	 * 
@@ -159,24 +160,6 @@ public class Response {
 		pw.println();
 		pw.close();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	/**
 	 * @return the clientSocket

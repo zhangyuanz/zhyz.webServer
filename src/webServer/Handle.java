@@ -44,19 +44,18 @@ public class Handle implements Runnable {
 			return;
 		}
 
-		
 		URL requesturl = request.getRequestURL();
 		if (requesturl == null) {
 			logger.info("请求的url是null！");
 			response.outFileList(new File(Config.ROOT_PATH));
 			return;
 		}
-		logger.info("请求的URL：/"+requesturl.getString());
+		logger.info("请求的URL：/" + requesturl.getString());
 		if (requesturl.getString().equals(Config.SERVER_TAG)) {
 			response.outFile(new File(Config.ROOT_PATH + Config.SERVER_TAG));
 			return;
 		}
-		
+
 		// 非根目录,没有访问权限
 		if (!requesturl.getRoot().equals(Config.ROOT)) {
 			logger.info("用户试图访问非根目录资源");
@@ -76,7 +75,7 @@ public class Handle implements Runnable {
 					logger.info("访问的文件不存在");
 					response.outNotExist();
 				} else {
-					//html页面，图片文件，则提供预览，静态文件提供下载，否则非法类型
+					// html页面，图片文件，则提供预览，静态文件提供下载，否则非法类型
 					if (contain(Config.PAGES, file.getName())) {
 						response.outFilePrivew(file);
 					} else if (!contain(Config.STATIC_FILES, file.getName())) {
