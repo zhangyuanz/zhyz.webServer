@@ -25,11 +25,17 @@ public class FileOperator {
 	 * 将文件的内容写入到一个socket
 	 */
 	public void file2Socket(File file, Socket clsk) {
+		if (file == null || !file.exists() || file.isDirectory())
+			return;
+		if(clsk == null || clsk.isClosed())
+			return;
+		
 		FileInputStream in = null;
 		DataOutputStream dis = null;
 		try {
 			in = new FileInputStream(file);
 			dis = new DataOutputStream(clsk.getOutputStream());
+			
 			byte[] bytes = new byte[4096];
 			logger.info("开始读取文件" + file.getName());
 			while (in.read(bytes) != -1) {
@@ -52,10 +58,11 @@ public class FileOperator {
 	}
 
 	public void fileList2Socket(File file, PrintStream pw) {
-		if (!file.isDirectory()) {
+		if (file == null || !file.exists() || !file.isDirectory()) 
 			return;
-		}
-
+		if (pw == null)
+			return;
+		
 		logger.info("上级路径：" + file.getPath());
 		pw.println("<a href='javascript:history.go(-1)'>返回上级</a><br>");
 		for (String str : file.list()) {
