@@ -51,13 +51,13 @@ public class Controller {
 				}
 			}
 		} catch (IOException e) {
-			logger.info("控制台输入异常");
+			logger.error("控制台输入异常");
 		} finally {
 			if (reader != null) {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					logger.info("流关闭异常");
+					logger.warn("流关闭异常");
 				}
 
 			}
