@@ -58,14 +58,11 @@ public class Response {
 		pw.println("Content-Type:application/octet-stream;charset=UTF-8");
 		pw.println("Content-Length:" + file.length());
 		pw.println();
-		try {
-			new FileOperator().file2Socket(file, clientSocket);
-			pw.println();
-		} finally {
-			if (pw != null) {
-				pw.close();
-			}
-		}
+		new FileOperator().file2Socket(file, clientSocket);
+		pw.println();		
+		pw.close();
+		
+		
 	}
 
 	/**
@@ -79,14 +76,10 @@ public class Response {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
 		pw.println();
-		try {
-			new FileOperator().file2Socket(file, clientSocket);
-			pw.println();
-		} finally {
-			if (pw != null) {
-				pw.close();
-			}
-		}
+		new FileOperator().file2Socket(file, clientSocket);
+		pw.println();
+		pw.close();
+	
 	}
 
 	// public void
@@ -153,14 +146,19 @@ public class Response {
 	 * 
 	 */
 	public void outNotSupportVersion() {
-		pw.println("HTTP/1.1 200 OK");
-		pw.println("Content-Type:text/html;charset=UTF-8");
-		pw.println();
+		outOk();
 		pw.println(" 505 Version Not Supported ");
 		pw.println();
 		pw.close();
 	}
-
+	/**
+	 * 向socket写入200 OK 的状态行和响应头
+	 */
+	private void outOk(){
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
+	}
 	/**
 	 * @return the clientSocket
 	 */
