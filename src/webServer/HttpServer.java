@@ -22,24 +22,17 @@ public class HttpServer implements Runnable {
 	private boolean flag = true;
 
 	/**
-	 * 初始化模块，绑定服务器监听的端口，指定线程池大小
-	 */
-	private void init() {
-		try {
-			serverSocket = new ServerSocket(Config.PORT);
-			pool = Executors.newFixedThreadPool(10);
-		} catch (IOException e) {
-			logger.info("无法启动HTTP服务器:" + e.getLocalizedMessage());
-		}	
-	}
-
-	/**
 	 * 构造方法，先初始化，然后开始运行服务线程
 	 */
 	public HttpServer() {
-		init();
-		new Thread(this).start();
-		logger.info("HTTP服务器正在运行,端口:" + Config.PORT);
+		try {
+			serverSocket = new ServerSocket(Config.PORT);
+			pool = Executors.newFixedThreadPool(10);
+			new Thread(this).start();
+			logger.info("HTTP服务器正在运行,端口:" + Config.PORT);
+		} catch (IOException e) {
+			logger.error("无法启动HTTP服务器:" + e.getLocalizedMessage());
+		}	
 	}
 
 	/**
@@ -50,13 +43,13 @@ public class HttpServer implements Runnable {
 		while (flag) {
 			try {
 				Socket client = serverSocket.accept();
-				logger.info("有客服端连接进来了，它是：" + client.toString());
+				logger.info("有客服端链接进来了：" + client.toString());
 				Handle handle = new Handle(client);
 				pool.execute(handle);
 			} catch (IOException e) {
 				//出现异常时及时关闭线程池，避免占用资源
 				pool.shutdown();
-				logger.info(e.getLocalizedMessage());
+				logger.error(e.getLocalizedMessage());
 			}
 		}
 	}
@@ -71,7 +64,7 @@ public class HttpServer implements Runnable {
 		try {
 			serverSocket.close();
 		} catch (IOException e) {
-			logger.info("serverSocket关闭异常" + e.getLocalizedMessage());
+			logger.warn("serverSocket关闭异常" + e.getLocalizedMessage());
 			flag = false;
 		} finally {
 			flag = false;
