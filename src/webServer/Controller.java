@@ -22,8 +22,7 @@ public class Controller {
 	 */
 	public static void main(String[] args) {
 		final Logger logger = LoggerFactory.getLogger(Controller.class);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				System.in));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String command = null;
 		HttpServer httpServer = null;
 		try {

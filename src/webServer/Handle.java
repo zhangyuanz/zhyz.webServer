@@ -17,7 +17,8 @@ import util.URL;
 public class Handle implements Runnable {
 	final Logger logger = LoggerFactory.getLogger(Handle.class);
 	private Socket clientSocket;
-
+	RequestAnalyze request;
+	Response response;
 	/**
 	 * 构造方法，初始化客服端socket对象
 	 * 
@@ -29,18 +30,27 @@ public class Handle implements Runnable {
 
 	@Override
 	public void run() {
-		handleRequest();
+		handle();
 	}
 
-	private void handleRequest() {
+	/**
+	 * 业务逻辑处理函数
+	 * 非get的请求返回Method Not Allowed
+	 * 用户直接输入主机，url为null则返回默认根目录
+	 * favicon.ico定位在根目录下
+	 * 访问非根目录，则返回无权限
+	 * 访问文件则返回文件下载，目录则返回文件列表
+	 * 区分文件的类型，决定响应的内容
+	 * 
+	 */
+	private void handle() {
 
-		RequestAnalyze request = new RequestAnalyze(clientSocket);
-		Response response = new Response(clientSocket);
+		request = new RequestAnalyze(clientSocket);
+		response = new Response(clientSocket);
 
 		if (request.getMethod() != null && !(request.getMethod().equals("GET"))) {
 			logger.info("请求是方法不是GET");
-			response.outNotGet();
-			// thow 异常？自定义异常
+			response.outNotGet();  //或者 thow 异常？自定义异常
 			return;
 		}
 

@@ -21,6 +21,5 @@ public class Config {
 	// 可以直至预览的文件
 	public static final String[] PAGES = { "html", "HTML", "html5", "HTML5" };
 	// 图片文件,这里只列举一部分
-	public static final String[] IMAGES = { "JPG", "jpg", "PNG", "png", "bmp",
-			"BMP" };
+	public static final String[] IMAGES = { "JPG", "jpg", "PNG", "png", "bmp", "BMP" };
 }

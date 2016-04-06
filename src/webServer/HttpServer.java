@@ -27,10 +27,10 @@ public class HttpServer implements Runnable {
 	private void init() {
 		try {
 			serverSocket = new ServerSocket(Config.PORT);
+			pool = Executors.newFixedThreadPool(10);
 		} catch (IOException e) {
 			logger.info("无法启动HTTP服务器:" + e.getLocalizedMessage());
-		}
-		pool = Executors.newFixedThreadPool(10);
+		}	
 	}
 
 	/**
@@ -54,6 +54,7 @@ public class HttpServer implements Runnable {
 				Handle handle = new Handle(client);
 				pool.execute(handle);
 			} catch (IOException e) {
+				//出现异常时及时关闭线程池，避免占用资源
 				pool.shutdown();
 				logger.info(e.getLocalizedMessage());
 			}

@@ -3,6 +3,7 @@ package webServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -31,23 +32,13 @@ public class RequestAnalyze {
 	//private String body = null;
 
 	/**
-	 * 默认构造函数
-	 */
-	public RequestAnalyze() {
-
-	}
-
-	/**
 	 * 通过socket对象构造RequestAnalyze对象，构造的对象将拥有http请求信息的封装信息
 	 * 
 	 * @param clientsocket
 	 */
 	public RequestAnalyze(Socket clientsocket) {
-		try {
-			this.analyze(clientsocket);
-		} catch (IOException e) {
-			logger.info("请求信息封装失败！" + e.getLocalizedMessage());
-		}
+		this.analyze(clientsocket);
+		
 	}
 
 	/**
@@ -57,28 +48,39 @@ public class RequestAnalyze {
 	 *            是客服端的socket连接
 	 * @throws IOException
 	 */
-	private void analyze(Socket clientSocket) throws IOException {
+	private void analyze(Socket clientSocket){
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
+			logger.info("开始封装客服端请求了...");
+			String firstLine = in.readLine();// 请求行
+			logger.info("firstLine:" + firstLine);
+			if (firstLine == null)
+				return;
+			firstLine = URLDecoder.decode(firstLine, "UTF-8");
+			analyzeFirstLine(firstLine);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				clientSocket.getInputStream(), "UTF-8"));
-		logger.info("开始封装客服端请求了...");
-		String firstLine = in.readLine();// 请求行
-		logger.info("firstLine:" + firstLine);
-		if (firstLine == null)
-			return;
-		firstLine = URLDecoder.decode(firstLine, "UTF-8");
-		analyzeFirstLine(firstLine);
-
-		String headLine = null;
-		while (true) {
-			headLine = in.readLine();
-			analyzeHeadLine(headLine);
-			if (headLine.isEmpty() || headLine == null) {
-				break;
+			String headLine = null;
+			while (true) {
+				headLine = in.readLine();
+				if (headLine.isEmpty() || headLine == null) {
+					break;
+				}
+				analyzeHeadLine(headLine);
 			}
+			logger.info("请求已封装完成");
+		} catch (UnsupportedEncodingException e) {
+			logger.info("url解码失败"+e.getLocalizedMessage());
+		} catch (IOException e) {
+			logger.info("IO："+e.getLocalizedMessage());
+		} finally{
+			if(in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					logger.info("流关闭异常"+e.getLocalizedMessage());
+				}
 		}
-
-		logger.info("请求已封装完成");
 	}
 	/**
 	 * 解析http请求头信息
