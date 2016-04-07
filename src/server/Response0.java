@@ -36,6 +36,7 @@ public class Response0 {
 	 * @param file
 	 */
 	public void downloadFile(File file) {
+		logger.info("开始download文件" + file.getName());
 		pw.println("HTTP/1.1 200 OK");
 		pw.print("Content-Disposition:attachment;filename=");
 		pw.println(file.getName());
@@ -43,8 +44,9 @@ public class Response0 {
 		pw.print("Content-Length:");
 		pw.println(file.length());
 		pw.println();
-		this.File2Socket(file);
+		this.file2Socket(file);
 		pw.println();
+		logger.info("download完毕！");
 	}
 	/**
 	 * 预览文件
@@ -54,14 +56,26 @@ public class Response0 {
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
 		pw.println();
-		this.File2Socket(file);
+		this.file2Socket(file);
+		pw.println();
+	}
+	/**
+	 * 预览图片
+	 */
+	public void privewImage(File file){
+		pw.println("HTTP/1.1 200 OK");
+		pw.println("Content-Type:text/html;charset=UTF-8");
+		pw.println();
+		pw.print("<img src='../");
+		pw.print(file.getName());
+		pw.println("'/>");
 		pw.println();
 	}
 	/**
 	 * 将文件写入socket
 	 * @param file
 	 */
-	private void File2Socket(File file){
+	private void file2Socket(File file){
 		if (file == null || !file.exists() || file.isDirectory())
 			return;
 		if(clsk == null || clsk.isClosed())
@@ -73,11 +87,11 @@ public class Response0 {
 			in = new FileInputStream(file);
 			dis = new DataOutputStream(clsk.getOutputStream());
 			byte[] bytes = new byte[4096];
-			logger.info("开始读取文件" + file.getName());
+			
 			while (in.read(bytes) != -1) {
 				dis.write(bytes);
 			}
-			logger.info("读取完毕！");
+
 		} catch (FileNotFoundException e) {
 			logger.info("文件未找到异常" + e.getLocalizedMessage());
 		} catch (IOException e) {
@@ -110,6 +124,7 @@ public class Response0 {
 				pw.print("<a href='");
 				pw.print(str);
 				pw.print("/'><font color = 'red'>");
+				pw.print(str);
 				pw.print("</font></a><br>");
 				pw.println();
 			} else {

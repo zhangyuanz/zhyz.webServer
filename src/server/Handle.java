@@ -91,14 +91,16 @@ public class Handle implements Runnable {
 					logger.info("访问的文件不存在");
 					warning("找不到文件");
 				} else {
-					
-					if (isHTML(file.getName()) || isImage(file.getName())) {
-						response.privewFile(file);
-					} else if (isStaticFile(file.getName())) {
-						response.downloadFile(file);
-					} else {
+					if (!isStaticFile(file.getName())){
 						warning("不支持该文件类型");
+						return;
 					}
+					if(isHTML(file.getName())){
+						response.privewFile(file);
+						return;
+					} else {
+						response.downloadFile(file);		
+					}					
 				}
 			}
 		}

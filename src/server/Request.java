@@ -71,7 +71,7 @@ public class Request {
 			String headLine = null;
 			while (true) {
 				headLine = in.readLine();
-				logger.debug(headLine);
+				logger.info(headLine);
 				if (headLine.isEmpty() || headLine == null) {
 					break;
 				}
