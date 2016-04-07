@@ -1,4 +1,4 @@
-package webServer;
+package server;
 
 /**
  * 服务器的配置文件，包括服务端口及服务目录

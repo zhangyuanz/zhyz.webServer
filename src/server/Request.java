@@ -1,4 +1,4 @@
-package webServer;
+package server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,15 +29,21 @@ public class Request {
 
 	private Map<String, String> head = new HashMap<String, String>();
 
-
-
+	/**
+	 * 静态工厂方法，根据不同的socket，可获得不同的request对象
+	 * @param client
+	 * @return
+	 */
+	public static Request getInstance (Socket client){
+		return new Request(client);
+	}
 	/**
 	 * 通过socket对象构造RequestAnalyze对象，构造的对象将拥有http请求信息的封装信息
 	 * 
 	 * @param clientsocket
 	 */
-	public Request(Socket clientsocket) {
-		this.analyze(clientsocket);
+	private Request(Socket client) {
+		this.analyze(client);
 		
 	}
 
@@ -49,6 +55,7 @@ public class Request {
 	 * @throws IOException
 	 */
 	private void analyze(Socket clientSocket){
+		
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream(), "UTF-8"));
@@ -59,11 +66,7 @@ public class Request {
 			if (firstLine == null)
 				return;
 			firstLine = URLDecoder.decode(firstLine, "UTF-8");
-			int x = firstLine.indexOf('/');
-			int y = firstLine.lastIndexOf('/');
-			setMethod(firstLine.substring(0, x - 1)); 
-			setRequestURL(new URL(firstLine.substring(x, y - 5)));
-			setProtocol(firstLine.substring(y - 4, firstLine.length()));
+			analyze(firstLine);
 
 			String headLine = null;
 			while (true) {
@@ -80,10 +83,21 @@ public class Request {
 			logger.info("请求已封装完成");
 			
 		} catch (UnsupportedEncodingException e) {
-			logger.error("url解码失败"+e.getLocalizedMessage());
+			logger.error("url解码失败:"+e.getLocalizedMessage());
 		} catch (IOException e) {
 			logger.error("IO："+e.getLocalizedMessage());
 		} 
+	}
+	/**
+	 * 解析請求行
+	 * @param firstLine
+	 */
+	private void analyze(String firstLine) {
+		int x = firstLine.indexOf('/');
+		int y = firstLine.lastIndexOf('/');
+		this.setMethod(firstLine.substring(0, x - 1)); 
+		this.setRequestURL(new URL(firstLine.substring(x, y - 5)));
+		this.setProtocol(firstLine.substring(y - 4, firstLine.length()));
 	}
 
 
@@ -97,7 +111,7 @@ public class Request {
 	/**
 	 * @param method the method to set
 	 */
-	public void setMethod(String method) {
+	private void setMethod(String method) {
 		this.method = method;
 	}
 
@@ -111,7 +125,7 @@ public class Request {
 	/**
 	 * @param protocol the protocol to set
 	 */
-	public void setProtocol(String protocol) {
+	private void setProtocol(String protocol) {
 		this.protocol = protocol;
 	}
 
@@ -125,7 +139,7 @@ public class Request {
 	/**
 	 * @param requestURL the requestURL to set
 	 */
-	public void setRequestURL(URL requestURL) {
+	private void setRequestURL(URL requestURL) {
 		this.requestURL = requestURL;
 	}
 	

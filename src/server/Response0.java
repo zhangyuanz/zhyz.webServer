@@ -1,4 +1,4 @@
-package webServer;
+package server;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -28,7 +28,7 @@ public class Response0 {
 		this.clsk = client;
 		this.pw = Tool.getPrint(client);
 	}
-	public  Response0 getInstance(Socket client){
+	public static  Response0 getInstance(Socket client){
 		return new Response0(client);
 	}
 	/**

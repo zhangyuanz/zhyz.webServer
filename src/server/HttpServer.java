@@ -1,4 +1,4 @@
-package webServer;
+package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -43,7 +43,7 @@ public class HttpServer implements Runnable {
 		while (flag) {
 			try {
 				Socket client = serverSocket.accept();
-				logger.info("有客服端链接进来了：" + client.toString());
+				logger.info("有客服端链接进来了：" + client.toString());	
 				Handle handle = new Handle(client);
 				pool.execute(handle);
 			} catch (IOException e) {

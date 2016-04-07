@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import webServer.RequestAnalyze;
+import server.Request;
 
 public class RequestAnalyzeTest {
 	

@@ -1,6 +1,6 @@
 package util;
 
-import webServer.Config;
+import server.Config;
 
 /**
  * URL是一种特殊的字符串，定义以表示却别，同时提供相关方法，方便操作 设计此类，一是想解决有关“/”硬编码,二是解决用户模糊输入时也能得到正确结果
