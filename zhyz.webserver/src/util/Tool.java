@@ -36,43 +36,13 @@ public class Tool {
 			return false;
 		String lastName = fileName.substring(fileName.lastIndexOf('.') + 1,
 				fileName.length());
-		lastName = toSmall(lastName);
 		for (String temp : fileLastNames) {
-			if (temp.equals(lastName)) {
+			if (temp.equalsIgnoreCase(lastName)) {
 				return true;
 			}
 		}
 		return false;
 
-	}
-
-	/**
-	 * 将一个字符串转换成小写的
-	 * 
-	 * <pre>
-	 * HTML = html
-	 * HtmL = html
-	 * JPG = jpg
-	 * jPg = jpg
-	 * </pre>
-	 * 
-	 * @param lastName
-	 * @return
-	 */
-	public static String toSmall(String lastName) {
-		StringBuilder sb = new StringBuilder();
-		if (lastName != null) {
-			char c;
-			for (int i = 0; i < lastName.length(); i++) {
-				c = lastName.charAt(i);
-				if (Character.isUpperCase(c)) {
-					sb.append(Character.toLowerCase(c));
-				} else {
-					sb.append(c);
-				}
-			}
-		}
-		return sb.toString();
 	}
 
 	/**

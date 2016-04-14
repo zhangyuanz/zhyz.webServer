@@ -32,12 +32,12 @@ public class ToolTest {
 	@Test
 	public void testContainLgnoreCaps(){
 		String[] files = { "jpg", "txt", "zip" };
-		assertTrue(Tool.contain(files, "zhyz.jpg"));
-		assertTrue(Tool.contain(files, "zhyz.Jpg"));
-		assertTrue(Tool.contain(files, "zhyz.JPG"));
-		assertTrue(Tool.contain(files, "succez.zhyz.jpg"));
-		assertTrue(Tool.contain(files, "zhyz.txt"));
-		assertTrue(Tool.contain(files, "zhyz.Zip"));
+		assertTrue(Tool.containIgnoreCaps(files, "zhyz.jpg"));
+		assertTrue(Tool.containIgnoreCaps(files, "zhyz.Jpg"));
+		assertTrue(Tool.containIgnoreCaps(files, "zhyz.JPG"));
+		assertTrue(Tool.containIgnoreCaps(files, "succez.zhyz.jpg"));
+		assertTrue(Tool.containIgnoreCaps(files, "zhyz.txt"));
+		assertTrue(Tool.containIgnoreCaps(files, "zhyz.Zip"));
 	}
 	/**
 	 * 测试工具类中getRangeStart方法
