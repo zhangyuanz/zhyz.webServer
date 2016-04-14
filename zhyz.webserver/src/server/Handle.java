@@ -121,15 +121,15 @@ public class Handle implements Runnable {
 	}
 
 	private boolean isHTML(String name) {
-		return Tool.contain(Config.WEB_PAGES, name);
+		return Tool.containIgnoreCaps(Config.WEB_PAGES, name);
 	}
 
 	private boolean isImage(String name) {
-		return Tool.contain(Config.IMAGES, name);
+		return Tool.containIgnoreCaps(Config.IMAGES, name);
 	}
 
 	private boolean isStaticFile(String name) {
-		return Tool.contain(Config.STATIC_FILES, name);
+		return Tool.containIgnoreCaps(Config.STATIC_FILES, name);
 	}
 
 	/**

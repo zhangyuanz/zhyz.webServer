@@ -23,6 +23,57 @@ public class Tool {
 		}
 		return false;
 	}
+	
+	/**
+	 * 忽略大小写字母条件下，判断一个文件是否包含在一个文件列表当中
+	 * @param fileLastNames
+	 * @param fileName
+	 * @return
+	 */
+	public static boolean containIgnoreCaps(String[] fileLastNames,
+			String fileName) {
+		if (fileLastNames == null || fileName == null)
+			return false;
+		String lastName = fileName.substring(fileName.lastIndexOf('.') + 1,
+				fileName.length());
+		lastName = toSmall(lastName);
+		for (String temp : fileLastNames) {
+			if (temp.equals(lastName)) {
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+	/**
+	 * 将一个字符串转换成小写的
+	 * 
+	 * <pre>
+	 * HTML = html
+	 * HtmL = html
+	 * JPG = jpg
+	 * jPg = jpg
+	 * </pre>
+	 * 
+	 * @param lastName
+	 * @return
+	 */
+	public static String toSmall(String lastName) {
+		StringBuilder sb = new StringBuilder();
+		if (lastName != null) {
+			char c;
+			for (int i = 0; i < lastName.length(); i++) {
+				c = lastName.charAt(i);
+				if (Character.isUpperCase(c)) {
+					sb.append(Character.toLowerCase(c));
+				} else {
+					sb.append(c);
+				}
+			}
+		}
+		return sb.toString();
+	}
 
 	/**
 	 * 解析Range头信息的start
