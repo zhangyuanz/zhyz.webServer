@@ -75,9 +75,27 @@ public class FileOpreatorTest {
 	 */
 	@Test
 	public void testIllegalParam() throws IOException{
-		File file = new File("D:/eeeeeeee.txt");
+		File file ;
 		File test = new File("D:/test2.txt");
 		OutputStream os = new FileOutputStream(test);
+		/*************************文件找不到**************************/
+		file = new File("D:/eeeeeeee.txt");
 		assertTrue(!FileOpreator.file2Socket(file, os));
+		/*************************文件只是一个目录**********************/
+		file = new File("D:/");
+		assertTrue(!FileOpreator.file2Socket(file, os));
+		/*************************file空参数*************************/
+		assertTrue(!FileOpreator.file2Socket(null, os));
+		/*************************os空参数***************************/
+		assertTrue(!FileOpreator.file2Socket(file, null));
+		/*********************start,end 自身通不过检查 *****************/
+		file = new File("D:/test.txt");
+		assertTrue(!FileOpreator.file2Socket(file, -1,10,null));
+		assertTrue(!FileOpreator.file2Socket(file, -2,10,null));
+		assertTrue(!FileOpreator.file2Socket(file, 5,-1,null));
+		assertTrue(!FileOpreator.file2Socket(file, 10,5,null));
+		/*********************start，end与file.length比较 ************/
+		assertTrue(!FileOpreator.file2Socket(file, 10,10000,null));
+		assertTrue(!FileOpreator.file2Socket(file, 10000,10,null));
 	}
 }

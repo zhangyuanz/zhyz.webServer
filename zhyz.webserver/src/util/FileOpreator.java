@@ -23,14 +23,21 @@ public class FileOpreator {
 	 * @param end
 	 * @param os
 	 */
-	public static boolean file2Socket(File file, long start, long end,
-			OutputStream os) {
-		if (file == null || !file.exists() || file.isDirectory())
-			return false;
+	public static boolean file2Socket(File file, long start, long end,OutputStream os) {
 		if (os == null)
 			return false;
-		if (start < 0 || end > file.length() || end - start > file.length())
+		
+		if (file == null || !file.exists() || file.isDirectory())
 			return false;
+		
+		if (start < 0 || start > end || end < 0 )
+			return false;
+		
+		long length = file.length();
+		if (start > length || end > length || end - start > length)
+			return false;
+		
+		
 		// 例如：range:bytes=-500代表最后500个字节
 		if (start == -1) {
 			start = file.length() - end;
@@ -59,7 +66,7 @@ public class FileOpreator {
 				raf.read(buffer, 0, (int) (total - Integer.MAX_VALUE));
 				dis.write(buffer);
 			}
-			
+
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
@@ -80,7 +87,7 @@ public class FileOpreator {
 	 * 
 	 * @param file
 	 * @param os
-	 * @return 
+	 * @return
 	 */
 	public static boolean file2Socket(File file, OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
@@ -101,7 +108,7 @@ public class FileOpreator {
 				dis.write(buffer.array());
 				buffer.clear();
 			}
-			
+
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
