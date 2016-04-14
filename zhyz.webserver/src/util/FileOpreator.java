@@ -3,7 +3,6 @@ package util;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
@@ -13,23 +12,25 @@ import java.nio.channels.FileChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class FileOpreator {
 	final static Logger logger = LoggerFactory.getLogger(FileOpreator.class);
+
 	/**
 	 * 将文件部分内容以自由读写方式，通过DataOutputStream形式写入输出流
+	 * 
 	 * @param file
 	 * @param start
 	 * @param end
 	 * @param os
 	 */
-	public static void file2Socket(File file, long start, long end, OutputStream os) {
+	public static boolean file2Socket(File file, long start, long end,
+			OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
-			return;
+			return false;
 		if (os == null)
-			return;
+			return false;
 		if (start < 0 || end > file.length() || end - start > file.length())
-			return;
+			return false;
 		// 例如：range:bytes=-500代表最后500个字节
 		if (start == -1) {
 			start = file.length() - end;
@@ -58,13 +59,20 @@ public class FileOpreator {
 				raf.read(buffer, 0, (int) (total - Integer.MAX_VALUE));
 				dis.write(buffer);
 			}
-
-		} catch (FileNotFoundException e) {
-			logger.error("文件未找到" + e.getLocalizedMessage());
-			e.printStackTrace();
+			
+			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
+			return false;
+		} finally {
+			try {
+				if (raf != null)
+					raf.close();
+			} catch (IOException e) {
+				logger.warn(e.getLocalizedMessage());
+			}
 		}
+
 	}
 
 	/**
@@ -72,13 +80,14 @@ public class FileOpreator {
 	 * 
 	 * @param file
 	 * @param os
+	 * @return 
 	 */
-	public static void file2Socket(File file, OutputStream os) {
+	public static boolean file2Socket(File file, OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
-			return;
+			return false;
 		if (os == null)
-			return;
-		
+			return false;
+
 		FileInputStream in = null;
 		DataOutputStream dis = null;
 		FileChannel fcin = null;
@@ -87,16 +96,16 @@ public class FileOpreator {
 			fcin = in.getChannel();
 			dis = new DataOutputStream(os);
 			ByteBuffer buffer = ByteBuffer.allocate(1024);
-			
+
 			while (fcin.read(buffer) != -1) {
 				dis.write(buffer.array());
 				buffer.clear();
 			}
-
-		} catch (FileNotFoundException e) {
-			logger.error("文件未找到异常" + e.getLocalizedMessage());
+			
+			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
+			return false;
 		} finally {
 			if (in != null) {
 				try {

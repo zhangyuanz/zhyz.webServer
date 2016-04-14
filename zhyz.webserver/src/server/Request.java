@@ -64,8 +64,7 @@ public class Request implements common.Request {
 					clientSocket.getInputStream(), "UTF-8"));
 
 			String firstLine = null;
-			try {
-				// 超时返回null
+			try {// 超时返回null
 				firstLine = in.readLine();
 			} catch (IOException e) {
 				logger.info("超时，关闭socket，原因：" + e.getLocalizedMessage());
