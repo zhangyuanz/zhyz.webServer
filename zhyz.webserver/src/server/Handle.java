@@ -62,7 +62,7 @@ public class Handle implements Runnable {
 			logger.info("请求的url是null！");
 			return;
 		}
-
+		// favicon.ico
 		if (url.getString().equals(Config.SERVER_TAG)) {
 			downloadFile(new File(Config.ROOT_PATH + Config.SERVER_TAG));
 			return;
@@ -74,60 +74,95 @@ public class Handle implements Runnable {
 			warning("没有权限");
 			return;
 		} else {
-			String path = url.toPath();
-			logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
-			File file = new File(path);
+			doLegal(url);
+		}
+	}
 
-			if (file.isDirectory()) {
-				logger.info("访问的资源是一个目录");
-				listOfFile(file);
+	/**
+	 * 处理合法的url输入，即：请求的方法是GET，请求的目录是根目录
+	 * 
+	 * @param url
+	 */
+	private void doLegal(URL url) {
+		String path = url.toPath();
+		logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
+		File file = new File(path);
+
+		if (file.isDirectory()) {
+			logger.info("访问的资源是一个目录");
+			listOfFile(file);
+		} else {
+			if (!file.exists()) {
+				logger.info("访问的文件不存在");
+				warning("找不到文件");
 			} else {
-
-				if (!file.exists()) {
-					logger.info("访问的文件不存在");
-					warning("找不到文件");
-				} else {
-					if (!isStaticFile(file.getName())) {
-						warning("不支持该文件类型");
-						return;
-					}
-					if (isImage(file.getName())) {
-						privewImage(file);
-						return;
-					}
-					if (isHTML(file.getName())) {
-						privewFile(file);
-						return;
-					}
-					String range = request.getHead().get("Range");
-					if (range == null) {
-						downloadFile(file);
-						return;
-					} else {
-
-						long start = 0;
-						long end = 0;
-						try {
-							start = Tool.getRangeStart(range);
-							end = Tool.getRangeEnd(range);
-						} catch (IllegalStringTypeException e) {
-							logger.warn("Range解析失败");
-						}
-						downloadFile(file, start, end);
-					}
-				}
+				doFileExist(file);
 			}
 		}
 	}
 
+	/**
+	 * 处理url请求的是某一文件的情况
+	 * 
+	 * @param file
+	 */
+	private void doFileExist(File file) {
+		if (!isStaticFile(file.getName())) {
+			warning("不支持该文件类型");
+			return;
+		}
+		if (isImage(file.getName())) {
+			privewImage(file);
+			return;
+		}
+		if (isHTML(file.getName())) {
+			privewFile(file);
+			return;
+		}
+		String range = request.getHead().get("Range");
+		if (range == null) {
+			downloadFile(file);
+			return;
+		} else {
+
+			long start = 0;
+			long end = 0;
+			try {
+				start = Tool.getRangeStart(range);
+				end = Tool.getRangeEnd(range);
+			} catch (IllegalStringTypeException e) {
+				logger.warn("Range解析失败");
+			}
+			downloadFile(file, start, end);
+		}
+	}
+
+	/**
+	 * 判断一个文件是否为web页面
+	 * 
+	 * @param name
+	 * @return
+	 */
 	private boolean isHTML(String name) {
 		return Tool.containIgnoreCaps(Config.WEB_PAGES, name);
 	}
 
+	/**
+	 * 判断一个文件时候为图片文件
+	 * 
+	 * @param name
+	 * @return
+	 */
 	private boolean isImage(String name) {
 		return Tool.containIgnoreCaps(Config.IMAGES, name);
 	}
 
+	/**
+	 * 判断一个文件是否为静态文件
+	 * 
+	 * @param name
+	 * @return
+	 */
 	private boolean isStaticFile(String name) {
 		return Tool.containIgnoreCaps(Config.STATIC_FILES, name);
 	}
@@ -148,7 +183,7 @@ public class Handle implements Runnable {
 	}
 
 	/**
-	 * 一次性全部下載文件
+	 * 为用户一次性全部下載文件
 	 * 
 	 * @param file
 	 *            待下载的文件
@@ -164,14 +199,14 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		FileOpreator.file2Socket(file,response.getSocket());
+		FileOpreator.file2Socket(file, response.getSocket());
 		pw.println();
 		logger.info("download完毕！");
 
 	}
 
 	/**
-	 * 实现分块传输下载文件
+	 * 为用户实现分块传输下载文件
 	 * 
 	 * @param file
 	 *            待下载的文件
@@ -203,7 +238,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		FileOpreator.file2Socket(file, start, end,response.getSocket());
+		FileOpreator.file2Socket(file, start, end, response.getSocket());
 		pw.println();
 		logger.info("此部分文件download完毕！");
 
@@ -237,7 +272,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		FileOpreator.file2Socket(file,response.getSocket());
+		FileOpreator.file2Socket(file, response.getSocket());
 		pw.println();
 
 	}
@@ -255,10 +290,9 @@ public class Handle implements Runnable {
 		pw.print("Content-Length:");
 		pw.println(file.length());
 		pw.println();
-		FileOpreator.file2Socket(file,response.getSocket());
+		FileOpreator.file2Socket(file, response.getSocket());
 		pw.println();
-		// logger.info("privewImage关闭socket了。");
-		// pw.close();
+
 	}
 
 	/**
