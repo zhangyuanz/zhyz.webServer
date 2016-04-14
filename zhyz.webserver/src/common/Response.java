@@ -1,7 +1,7 @@
 package common;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.Socket;
 
 public interface Response {
 	
@@ -9,6 +9,6 @@ public interface Response {
 
 	public void close();
 	
-	public Socket getSocket();
+	public OutputStream getOutputStream();
 
 }

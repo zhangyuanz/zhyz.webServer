@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
-import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -17,14 +17,16 @@ import org.slf4j.LoggerFactory;
 public class FileOpreator {
 	final static Logger logger = LoggerFactory.getLogger(FileOpreator.class);
 	/**
-	 * 此处buffer的大小恐怕不够客服端请求的字节长度，明日需优化 并且要对start，end进行检查 20160408
+	 * 将文件部分内容以自由读写方式，通过DataOutputStream形式写入输出流
+	 * @param file
+	 * @param start
+	 * @param end
+	 * @param os
 	 */
-	public static void file2Socket(File file, long start, long end, Socket clsk) {
+	public static void file2Socket(File file, long start, long end, OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
 			return;
-		if (clsk == null || clsk.isClosed())
-			return;
-		if (clsk == null || clsk.isClosed())
+		if (os == null)
 			return;
 		if (start < 0 || end > file.length() || end - start > file.length())
 			return;
@@ -40,7 +42,7 @@ public class FileOpreator {
 		DataOutputStream dis = null;
 		try {
 			raf = new RandomAccessFile(file, "r");
-			dis = new DataOutputStream(clsk.getOutputStream());
+			dis = new DataOutputStream(os);
 			raf.seek(start);
 			long total = end - start;
 			byte[] buffer;
@@ -66,27 +68,26 @@ public class FileOpreator {
 	}
 
 	/**
-	 * 将文件写入socket
+	 * 将文件以NIO的方式通过DataOutputStream形式写入输出流
 	 * 
 	 * @param file
+	 * @param os
 	 */
-	public static void file2Socket(File file, Socket clsk) {
+	public static void file2Socket(File file, OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
 			return;
-		if (clsk == null || clsk.isClosed())
+		if (os == null)
 			return;
-		if (clsk == null || clsk.isClosed())
-			return;
-
+		
 		FileInputStream in = null;
 		DataOutputStream dis = null;
 		FileChannel fcin = null;
 		try {
 			in = new FileInputStream(file);
 			fcin = in.getChannel();
-			dis = new DataOutputStream(clsk.getOutputStream());
-			// byte[] bytes = new byte[4096];
+			dis = new DataOutputStream(os);
 			ByteBuffer buffer = ByteBuffer.allocate(1024);
+			
 			while (fcin.read(buffer) != -1) {
 				dis.write(buffer.array());
 				buffer.clear();

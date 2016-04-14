@@ -1,8 +1,10 @@
 package server;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ public class Response implements common.Response {
 	final Logger logger = LoggerFactory.getLogger(Response.class);
 	private Socket clsk = null;
 	private PrintStream pw = null;
+	private OutputStream os = null;
 
 	private Response(Socket client) {
 		this.clsk = client;
@@ -25,8 +28,6 @@ public class Response implements common.Response {
 	public static Response getInstance(Socket client) {
 		return new Response(client);
 	}
-
-	
 
 	/**
 	 * 获取socket的打印流
@@ -44,16 +45,7 @@ public class Response implements common.Response {
 		}
 		return this.pw;
 	}
-	
-	/**
-	 * 获取客服端socket
-	 * @return
-	 */
-	@Override
-	public Socket getSocket(){
-		return this.clsk;	
-	}
-	
+
 	/**
 	 * 关闭客服端socket
 	 */
@@ -66,6 +58,24 @@ public class Response implements common.Response {
 			logger.warn("服務器未能关闭socket");
 		}
 
+	}
+
+	/**
+	 * 获取客服端socket的输出流
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	@Override
+	public OutputStream getOutputStream() {
+		try {
+			if (this.os == null)
+				return this.clsk.getOutputStream();
+		} catch (IOException e) {
+			logger.error(e.getLocalizedMessage());
+			return null;
+		}
+		return this.os;
 	}
 
 }
