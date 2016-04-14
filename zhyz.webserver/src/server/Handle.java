@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import expection.IllegalStringTypeException;
 import expection.MethodError;
+import util.FileOpreator;
 import util.Tool;
 import util.URL;
 
@@ -163,7 +164,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		response.file2Socket(file);
+		FileOpreator.file2Socket(file,response.getSocket());
 		pw.println();
 		logger.info("download完毕！");
 
@@ -202,7 +203,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		response.file2Socket(file, start, end);
+		FileOpreator.file2Socket(file, start, end,response.getSocket());
 		pw.println();
 		logger.info("此部分文件download完毕！");
 
@@ -236,7 +237,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		response.file2Socket(file);
+		FileOpreator.file2Socket(file,response.getSocket());
 		pw.println();
 
 	}
@@ -254,7 +255,7 @@ public class Handle implements Runnable {
 		pw.print("Content-Length:");
 		pw.println(file.length());
 		pw.println();
-		response.file2Socket(file);
+		FileOpreator.file2Socket(file,response.getSocket());
 		pw.println();
 		// logger.info("privewImage关闭socket了。");
 		// pw.close();
