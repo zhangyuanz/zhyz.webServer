@@ -121,7 +121,7 @@ public class Handle implements Runnable {
 	}
 
 	private boolean isHTML(String name) {
-		return Tool.contain(Config.PAGES, name);
+		return Tool.contain(Config.WEB_PAGES, name);
 	}
 
 	private boolean isImage(String name) {
@@ -217,9 +217,9 @@ public class Handle implements Runnable {
 	private void setKeepAlive(PrintStream pw) {
 		pw.println("Connection: keep-alive");
 		pw.print("Keep-Alive: timeout=");
-		pw.print(Config.TIME_OUT / 1000);
+		pw.print(Config.KEEP_ALIVE_TIME_OUT / 1000);
 		pw.print(",max=");
-		pw.println(Config.MAX);
+		pw.println(Config.SOCKET_REUSE_MAX_TIMES);
 	}
 
 	/**

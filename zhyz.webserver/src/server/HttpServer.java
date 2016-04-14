@@ -46,8 +46,8 @@ public class HttpServer implements Runnable {
 				logger.info("有客服端链接进来了：" + client.toString());
 				client.setKeepAlive(true);
 				// socket的read方法最多阻塞10秒，就会抛出异常，即：客服端在一个连接之后5秒内没有发送任何请求内容，则关闭次连接
-				client.setSoTimeout(Config.TIME_OUT);
-				int max = Config.MAX;
+				client.setSoTimeout(Config.KEEP_ALIVE_TIME_OUT);
+				int max = Config.SOCKET_REUSE_MAX_TIMES;
 				while (max >= 0) {
 					Request request = Request.getInstance(client);
 					if (client.isClosed())

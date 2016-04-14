@@ -6,8 +6,7 @@ import util.URL;
 
 public interface Request {
 	/**
-	 * 获取http请求的请求方法
-	 * 获取请求的方法
+	 * 获取http请求的请求方法 获取请求的方法
 	 * 
 	 * @return
 	 */
