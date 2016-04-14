@@ -15,7 +15,6 @@ public class ClientDownloadByPartsTest {
 	public void client() throws HttpException, IOException {
 		HttpClient client = new HttpClient();
 		HttpMethod method = new GetMethod("http://localhost/d/test.txt");
-
 		byte[] bytes = new byte[114];
 		method.setRequestHeader("Range", "bytes=0-10");
 		client.executeMethod(method);

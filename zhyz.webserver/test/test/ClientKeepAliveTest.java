@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 
 import org.junit.Test;
 
-public class ClientKeepAliveTestTest {
+public class ClientKeepAliveTest {
 
 	private Socket client;
 
