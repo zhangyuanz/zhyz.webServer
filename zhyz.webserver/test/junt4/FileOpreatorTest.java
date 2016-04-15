@@ -15,10 +15,10 @@ import util.FileOpreator;
 
 public class FileOpreatorTest {
 	/**
-	 * 测试把文件内容写入到输出流中的方法file2socket(file,os)
+	 * 测试把文件内容写入到输出流中的方法file2OutputStream(file,os)
 	 * 
 	 * <pre>
-	 * 通过一个文件来构造输入流，传入file2Socket中，这样不必构造socket
+	 * 通过一个文件来构造输入流，传入file2OutputStream中，这样不必构造socket
 	 * 然后再把文件内容读取出来，和源文件内容断言
 	 * </pre>
 	 * 
@@ -45,7 +45,7 @@ public class FileOpreatorTest {
 	}
 
 	/**
-	 * 测试把文件部分数据写入到输出流的函数file2socket(file,start,end,os)
+	 * 测试把文件部分数据写入到输出流的函数file2OutputStream(file,start,end,os)
 	 * 将一个文件的内容分两次写入到os输出流到test3文件， 然后再把其内容读取出来，和源文件内容进行断言
 	 * 
 	 * @throws IOException
