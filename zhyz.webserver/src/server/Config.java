@@ -38,11 +38,11 @@ public class Config {
 	/**
 	 * 可以直至预览的文件
 	 */
-	public static final String[] WEB_PAGES = { "html", "html5"};
+	public static final String[] WEB_PAGES = { "html", "html5" };
 	/**
 	 * 图片文件,这里只列举一部分
 	 */
-	public static final String[] IMAGES = { "jpg", "png", "bmp"};
+	public static final String[] IMAGES = { "jpg", "png", "bmp" };
 
 	/**
 	 * 最大复用socket长连接的次数

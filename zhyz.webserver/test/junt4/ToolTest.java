@@ -17,6 +17,7 @@ public class ToolTest {
 		assertTrue(Tool.contain(files, "zhyz.txt"));
 		assertTrue(Tool.contain(files, "zhyz.zip"));
 	}
+
 	/**
 	 * 测试contain方法的空参数
 	 */
@@ -26,11 +27,12 @@ public class ToolTest {
 		assertTrue(!Tool.contain(null, "zhyz.jpg"));
 		assertTrue(!Tool.contain(files, null));
 	}
+
 	/**
 	 * 测试忽略大小写的判断文件名是否为指定文件后缀名列表当中的方法
 	 */
 	@Test
-	public void testContainLgnoreCaps(){
+	public void testContainLgnoreCaps() {
 		String[] files = { "jpg", "txt", "zip" };
 		assertTrue(Tool.containIgnoreCaps(files, "zhyz.jpg"));
 		assertTrue(Tool.containIgnoreCaps(files, "zhyz.Jpg"));
@@ -39,8 +41,10 @@ public class ToolTest {
 		assertTrue(Tool.containIgnoreCaps(files, "zhyz.txt"));
 		assertTrue(Tool.containIgnoreCaps(files, "zhyz.Zip"));
 	}
+
 	/**
 	 * 测试工具类中getRangeStart方法
+	 * 
 	 * @throws IllegalStringTypeException
 	 */
 	@Test
@@ -65,8 +69,10 @@ public class ToolTest {
 		assertEquals(500, start3);
 		assertEquals(0, start4);
 	}
+
 	/**
 	 * 测试工具类中的gerRangeEnd方法
+	 * 
 	 * @throws IllegalStringTypeException
 	 */
 	@Test

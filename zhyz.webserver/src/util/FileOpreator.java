@@ -23,21 +23,21 @@ public class FileOpreator {
 	 * @param end
 	 * @param os
 	 */
-	public static boolean file2Socket(File file, long start, long end,OutputStream os) {
+	public static boolean file2Socket(File file, long start, long end,
+			OutputStream os) {
 		if (os == null)
 			return false;
-		
+
 		if (file == null || !file.exists() || file.isDirectory())
 			return false;
-		
-		if (start < 0 || start > end || end < 0 )
+
+		if (start < 0 || start > end || end < 0)
 			return false;
-		
+
 		long length = file.length();
 		if (start > length || end > length || end - start > length)
 			return false;
-		
-		
+
 		// 例如：range:bytes=-500代表最后500个字节
 		if (start == -1) {
 			start = file.length() - end;

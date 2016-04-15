@@ -23,9 +23,10 @@ public class Tool {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 忽略大小写字母条件下，判断一个文件是否包含在一个文件列表当中
+	 * 
 	 * @param fileLastNames
 	 * @param fileName
 	 * @return

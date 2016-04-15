@@ -10,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 服务器监听端口的线程类，在创建的同时开始执行run
- * 拥有一个线程池和一个serversocket对象
- * 构造方法初始化设置，并绑定配置端口
+ * 服务器监听端口的线程类，在创建的同时开始执行run 拥有一个线程池和一个serversocket对象 构造方法初始化设置，并绑定配置端口
  * 
  * @author xmubaga
  *
