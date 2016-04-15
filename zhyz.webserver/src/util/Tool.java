@@ -55,7 +55,7 @@ public class Tool {
 	public static int getRangeStart(String range)
 			throws IllegalStringTypeException {
 
-		if (range.startsWith("Range"))
+		if (!range.startsWith("bytes="))
 			throw new IllegalStringTypeException("非Range头");
 		int x = range.indexOf('=');
 		int y = range.lastIndexOf('-');
@@ -86,7 +86,7 @@ public class Tool {
 	 */
 	public static int getRangeEnd(String range)
 			throws IllegalStringTypeException {
-		if (range.startsWith("Range"))
+		if (!range.startsWith("bytes="))
 			throw new IllegalStringTypeException("非Range头");
 		int y = range.lastIndexOf('-');
 
