@@ -20,11 +20,21 @@ import util.URL;
  */
 public class Request implements common.Request {
 	final Logger logger = LoggerFactory.getLogger(Request.class);
-
-	private String method = null;// 请求方法
-	private String protocol = null;// 协议版本
-	private URL requestURL = null;// 请求的URI地址 在HTTP请求的第一行的请求方法后面
-
+	/**
+	 * http请求方法
+	 */
+	private String method = null;
+	/**
+	 * http请求的协议版本
+	 */
+	private String protocol = null;
+	/**
+	 * http请求的资源
+	 */
+	private URL requestURL = null;
+	/**
+	 * http请求的头部信息
+	 */
 	private HashMap<String, String> head = new HashMap<String, String>();
 
 	/**
