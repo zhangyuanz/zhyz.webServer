@@ -199,7 +199,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 		setKeepAlive(pw);
 		pw.println();
-		FileOpreator.file2Socket(file, response.getOutputStream());
+		FileOpreator.file2OutputStream(file, response.getOutputStream());
 		pw.println();
 		logger.info("download完毕！");
 
@@ -238,7 +238,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		FileOpreator.file2Socket(file, start, end, response.getOutputStream());
+		FileOpreator.file2OutputStream(file, start, end, response.getOutputStream());
 		pw.println();
 		logger.info("此部分文件download完毕！");
 
@@ -272,7 +272,7 @@ public class Handle implements Runnable {
 		pw.println(file.length());
 
 		pw.println();
-		FileOpreator.file2Socket(file, response.getOutputStream());
+		FileOpreator.file2OutputStream(file, response.getOutputStream());
 		pw.println();
 
 	}
@@ -290,7 +290,7 @@ public class Handle implements Runnable {
 		pw.print("Content-Length:");
 		pw.println(file.length());
 		pw.println();
-		FileOpreator.file2Socket(file, response.getOutputStream());
+		FileOpreator.file2OutputStream(file, response.getOutputStream());
 		pw.println();
 
 	}

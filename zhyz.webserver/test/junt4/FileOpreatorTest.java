@@ -30,8 +30,7 @@ public class FileOpreatorTest {
 
 		File test = new File("D:/test2.txt");
 		OutputStream os = new FileOutputStream(test);
-		FileOpreator.file2Socket(file, os);
-
+		FileOpreator.file2OutputStream(file, os);
 		DataInputStream dis = new DataInputStream(new FileInputStream(test));
 		byte[] buffer = new byte[114];
 		dis.read(buffer);
@@ -56,9 +55,10 @@ public class FileOpreatorTest {
 		File file = new File("D:/test.txt");
 		File test = new File("D:/test2.txt");
 		OutputStream os = new FileOutputStream(test);
-		FileOpreator.file2Socket(file, 0, 20, os);
-		FileOpreator.file2Socket(file, 20, 114, os);
-
+		FileOpreator.file2OutputStream(file, 0, 20, os);
+		System.out.println();
+		FileOpreator.file2OutputStream(file, 20, 114, os);
+		System.out.println();
 		DataInputStream dis = new DataInputStream(new FileInputStream(test));
 		byte[] buffer = new byte[114];
 		dis.read(buffer);
@@ -84,22 +84,22 @@ public class FileOpreatorTest {
 		OutputStream os = new FileOutputStream(test);
 		/************************* 文件找不到 **************************/
 		file = new File("D:/eeeeeeee.txt");
-		assertTrue(!FileOpreator.file2Socket(file, os));
+		assertTrue(!FileOpreator.file2OutputStream(file, os));
 		/************************* 文件只是一个目录 **********************/
 		file = new File("D:/");
-		assertTrue(!FileOpreator.file2Socket(file, os));
+		assertTrue(!FileOpreator.file2OutputStream(file, os));
 		/************************* file空参数 *************************/
-		assertTrue(!FileOpreator.file2Socket(null, os));
+		assertTrue(!FileOpreator.file2OutputStream(null, os));
 		/************************* os空参数 ***************************/
-		assertTrue(!FileOpreator.file2Socket(file, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, null));
 		/********************* start,end 自身通不过检查 *****************/
 		file = new File("D:/test.txt");
-		assertTrue(!FileOpreator.file2Socket(file, -1, 10, null));
-		assertTrue(!FileOpreator.file2Socket(file, -2, 10, null));
-		assertTrue(!FileOpreator.file2Socket(file, 5, -1, null));
-		assertTrue(!FileOpreator.file2Socket(file, 10, 5, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, -1, 10, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, -2, 10, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, 5, -1, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, 10, 5, null));
 		/********************* start，end与file.length比较 ************/
-		assertTrue(!FileOpreator.file2Socket(file, 10, 10000, null));
-		assertTrue(!FileOpreator.file2Socket(file, 10000, 10, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, 10, 10000, null));
+		assertTrue(!FileOpreator.file2OutputStream(file, 10000, 10, null));
 	}
 }

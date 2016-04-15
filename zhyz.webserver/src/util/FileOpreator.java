@@ -23,7 +23,7 @@ public class FileOpreator {
 	 * @param end
 	 * @param os
 	 */
-	public static boolean file2Socket(File file, long start, long end,
+	public static boolean file2OutputStream(File file, long start, long end,
 			OutputStream os) {
 		if (os == null)
 			return false;
@@ -53,18 +53,30 @@ public class FileOpreator {
 			dis = new DataOutputStream(os);
 			raf.seek(start);
 			long total = end - start;
-			byte[] buffer;
-			// total肯定是小于文件长度的数值，因为在一开始参数检查就排除了total大于文件长度情况
-			if (total <= Integer.MAX_VALUE) {
-				buffer = new byte[(int) total];
-				raf.read(buffer);
+			/*
+			 * 20160415-am-11:40
+			 * issues：read(b),read(b,off,len)方法返回int代表实际读取的字节数，也就是说在一开始，无法确定读取的字节数
+			 * 每次向4096个字节数组中读取入数据，而实际读取的字节个数n并不确定是多少，
+			 * sum的值并不一定能够=total，可能直到文件结束，while才结束，这样就失去了end的意义，出错
+			 * 改为一个字节一个字节的读取
+			byte[] buffer = new byte[4096];
+			long n = 0;
+			long sum = 0;
+			while((n = raf.read(buffer)) != -1){
+				sum = sum +n;
 				dis.write(buffer);
-			} else {
-				buffer = new byte[Integer.MAX_VALUE];
-				raf.read(buffer);
-				dis.write(buffer);
-				raf.read(buffer, 0, (int) (total - Integer.MAX_VALUE));
-				dis.write(buffer);
+				if(sum == total)
+					break;
+			}
+			 */
+			int b = 0;
+			int sum = 0;
+			while(b!=-1){
+				b =raf.read();
+				dis.write(b);
+				sum++;
+				if(sum == total)
+					break;
 			}
 
 			return true;
@@ -89,7 +101,7 @@ public class FileOpreator {
 	 * @param os
 	 * @return
 	 */
-	public static boolean file2Socket(File file, OutputStream os) {
+	public static boolean file2OutputStream(File file, OutputStream os) {
 		if (file == null || !file.exists() || file.isDirectory())
 			return false;
 		if (os == null)
