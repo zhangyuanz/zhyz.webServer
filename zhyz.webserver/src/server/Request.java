@@ -74,7 +74,7 @@ public class Request implements common.Request {
 
 			if (firstLine == null) {
 				// 请求行为null，并不一定是超时，说明是客服端自己关闭了socket，所以这里需被动关闭本次链接，避免httpServer循环等max减为0时才跳出循环
-				logger.warn("请求行是空，关闭socket。");
+				logger.warn("客服端端关闭了socket。");
 				clientSocket.close();
 				return;
 			} else
@@ -168,18 +168,5 @@ public class Request implements common.Request {
 	public HashMap<String, String> getHead() {
 		return head;
 	}
-
-	/**
-	 * 截取字符串中关键字以后字符串
-	 * 
-	 * @param line
-	 * @param key
-	 * @return
-	 */
-	/*
-	 * private String cut(String str, String line, String key) { if
-	 * (line.startsWith(key)) { return line.substring(line.indexOf(":") + 2,
-	 * line.length()); } else { } return str; }
-	 */
 
 }

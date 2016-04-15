@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 服务器监听端口的线程类，在创建的同时开始执行run 拥有一个线程池和一个serversocket属性 init方法初始化线程池大小，并绑定配置端口
+ * 服务器监听端口的线程类，在创建的同时开始执行run
+ * 拥有一个线程池和一个serversocket对象
+ * 构造方法初始化设置，并绑定配置端口
  * 
  * @author xmubaga
  *
@@ -27,7 +29,7 @@ public class HttpServer implements Runnable {
 	public HttpServer() {
 		try {
 			serverSocket = new ServerSocket(Config.PORT);
-			pool = Executors.newFixedThreadPool(10);
+			pool = Executors.newFixedThreadPool(Config.POOL_SIZE);
 			new Thread(this).start();
 			logger.info("HTTP服务器正在运行,端口:" + Config.PORT);
 		} catch (IOException e) {

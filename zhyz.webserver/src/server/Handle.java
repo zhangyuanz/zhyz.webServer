@@ -197,7 +197,7 @@ public class Handle implements Runnable {
 		pw.println("Content-Type:application/octet-stream;charset=UTF-8");
 		pw.print("Content-Length:");
 		pw.println(file.length());
-
+		setKeepAlive(pw);
 		pw.println();
 		FileOpreator.file2Socket(file, response.getOutputStream());
 		pw.println();

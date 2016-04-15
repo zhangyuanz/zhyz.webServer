@@ -13,6 +13,11 @@ public class Config {
 	 */
 	public static final int PORT = 80;
 	/**
+	 * 服务器线程池的大小
+	 * 
+	 */
+	public static final int POOL_SIZE = 30;
+	/**
 	 * 服务器根
 	 */
 	public static final String ROOT = "d";
