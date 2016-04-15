@@ -311,24 +311,20 @@ public class Handle implements Runnable {
 		setKeepAlive(pw);
 		pw.println();
 		pw.println("<a href='javascript:history.go(-1)'>返回上级</a><br>");
-		for (String str : file.list()) {
-			String thisPath = file.toString().replace("\\", "/") + '/' + str;
-			if (new File(thisPath).isDirectory()) {
-				pw.print("<a href='");
-				pw.print(str);
-				pw.print("/'><font color = 'red'>");
-				pw.print(str);
-				pw.print("</font></a><br>");
-				pw.println();
-			} else {
-				pw.print("<a href='");
-				pw.print(str);
-				pw.print("/'>");
-				pw.print(str);
-				pw.print("</a><br>");
-				pw.println();
-			}
+		String parentPath = file.getPath().replace('\\', '/') + '/';
+		for (String name : file.list()) {
+			pw.print("<a href='");
+			pw.print(name);
+			pw.print("/'><font ");
+			if (new File(parentPath+name).isDirectory())
+				pw.print(" color = 'red'");
+			pw.print('>');
+			pw.print(name);
+			pw.print("</font>");
+			pw.print("</a><br>");
+			pw.println();
 		}
+		pw.println();
 		logger.info("目录文件列表响应完毕！");
 	}
 }
