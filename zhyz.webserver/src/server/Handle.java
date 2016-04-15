@@ -41,18 +41,22 @@ public class Handle implements Runnable {
 		} catch (MethodError e) {
 			logger.error(e.getLocalizedMessage());
 			return;
+		} catch (IOException e) {
+			logger.error(e.getLocalizedMessage());
+			return;
 		}
 	}
 
 	/**
-	 * 业务逻辑处理函数 非get的请求抛出异常 用户直接输入主机，url为null则返回默认根目录 favicon.ico定位在根目录下
+	 * 核心业务逻辑处理函数,
+	 * 非get的请求抛出异常 用户直接输入主机，url为null则返回默认根目录 favicon.ico定位在根目录下
 	 * 访问非根目录，则返回无权限 访问文件则返回文件下载，目录则返回文件列表 区分文件的类型，决定响应的内容
 	 * 
 	 * @throws MethodError
 	 * @throws IOException
 	 * 
 	 */
-	private void handle() throws MethodError {
+	private void handle() throws MethodError, IOException {
 		if (request.getMethod() != null && !(request.getMethod().equals("GET"))) {
 			throw new MethodError("非GET方法");
 		}
@@ -82,8 +86,9 @@ public class Handle implements Runnable {
 	 * 处理合法的url输入，即：请求的方法是GET，请求的目录是根目录
 	 * 
 	 * @param url
+	 * @throws IOException 
 	 */
-	private void doLegal(URL url) {
+	private void doLegal(URL url) throws IOException {
 		String path = url.toPath();
 		logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
 		File file = new File(path);
@@ -105,8 +110,9 @@ public class Handle implements Runnable {
 	 * 处理url请求的是某一文件的情况
 	 * 
 	 * @param file
+	 * @throws IOException 
 	 */
-	private void doFileExist(File file) {
+	private void doFileExist(File file) throws IOException {
 		if (!isStaticFile(file.getName())) {
 			warning("不支持该文件类型");
 			return;
@@ -171,8 +177,9 @@ public class Handle implements Runnable {
 	 * 向浏览器用户输出提示信息
 	 * 
 	 * @param info
+	 * @throws IOException 
 	 */
-	private void warning(String info) {
+	private void warning(String info) throws IOException {
 		PrintStream pw = response.getPrintStream();
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:text/html;charset=UTF-8");
@@ -187,8 +194,9 @@ public class Handle implements Runnable {
 	 * 
 	 * @param file
 	 *            待下载的文件
+	 * @throws IOException 
 	 */
-	private void downloadFile(File file) {
+	private void downloadFile(File file) throws IOException {
 		logger.info("开始download文件" + file.getName());
 		PrintStream pw = response.getPrintStream();
 		pw.println("HTTP/1.1 200 OK");
@@ -214,8 +222,9 @@ public class Handle implements Runnable {
 	 *            开始下载的位置
 	 * @param end
 	 *            下载结束的位置
+	 * @throws IOException 
 	 */
-	private void downloadFile(File file, long start, long end) {
+	private void downloadFile(File file, long start, long end) throws IOException {
 		PrintStream pw = response.getPrintStream();
 		logger.info("开始download文件的一部分" + file.getName());
 		pw.println("HTTP/1.1 200 OK");
@@ -261,9 +270,10 @@ public class Handle implements Runnable {
 	 * 预览文件
 	 * 
 	 * @param file
+	 * @throws IOException 
 	 */
 
-	private void privewFile(File file) {
+	private void privewFile(File file) throws IOException {
 		PrintStream pw = response.getPrintStream();
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type: text/html; charset=UTF-8");
@@ -281,8 +291,9 @@ public class Handle implements Runnable {
 	 * 预览图片
 	 * 
 	 * @param file
+	 * @throws IOException 
 	 */
-	private void privewImage(File file) {
+	private void privewImage(File file) throws IOException {
 		PrintStream pw = response.getPrintStream();
 		pw.println("HTTP/1.1 200 OK");
 		pw.println("Content-Type:image/jpeg;charset=UTF-8");
@@ -299,9 +310,10 @@ public class Handle implements Runnable {
 	 * 显示目录下的文件列表
 	 * 
 	 * @param file
+	 * @throws IOException 
 	 */
 
-	private void listOfFile(File file) {
+	private void listOfFile(File file) throws IOException {
 		if (file == null || !file.exists() || !file.isDirectory())
 			return;
 		logger.info("开始响应目录文件列表");

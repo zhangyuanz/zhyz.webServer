@@ -33,17 +33,14 @@ public class Response implements common.Response {
 	 * 获取socket的打印流
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
 	@Override
-	public PrintStream getPrintStream() {
-		try {
-			if (this.pw == null)
-				return new PrintStream(this.clsk.getOutputStream());
-		} catch (IOException e) {
-			logger.error(e.getLocalizedMessage());
-			return null;
-		}
-		return this.pw;
+	public PrintStream getPrintStream() throws IOException {
+		if (this.pw == null)
+			return new PrintStream(this.clsk.getOutputStream());
+		else
+			return this.pw;
 	}
 
 	/**
@@ -67,15 +64,11 @@ public class Response implements common.Response {
 	 * @throws IOException
 	 */
 	@Override
-	public OutputStream getOutputStream() {
-		try {
-			if (this.os == null)
-				return this.clsk.getOutputStream();
-		} catch (IOException e) {
-			logger.error(e.getLocalizedMessage());
-			return null;
-		}
-		return this.os;
+	public OutputStream getOutputStream() throws IOException {
+		if (this.os == null)
+			return this.clsk.getOutputStream();
+		else
+			return this.os;
 	}
 
 }
