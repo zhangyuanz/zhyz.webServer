@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class FileOpreator {
 			long total = end - start;
 			//经调查研究，read(b)原则上每次一定会读满，返回值等于b的长度，只是在文件末尾时，可能读不满，返回实际读的长度，如果恰巧最后一次也读满，则再次读取会返回-1
 			//误区：以为每次read的时候都有可能得到小于b长度的返回值，而实际上只有到达文件末尾时，才有能出现小于b长度的返回值
+			/*
 			byte[] buffer = new byte[bufferSize];
 			int readTimes = (int) (total / bufferSize);
 			for (int i = 0; i < readTimes; i++) {
@@ -63,6 +65,35 @@ public class FileOpreator {
 			}
 			raf.read(buffer);
 			dis.write(buffer, 0, (int) (total % bufferSize));
+			*/
+			FileChannel fc = raf.getChannel();
+			MappedByteBuffer b = fc.map(FileChannel.MapMode.READ_ONLY, start, total);
+			byte[] buffer = new byte[4096];
+			while(true){
+				if(b.remaining() > 4096){
+					b.get(buffer);
+					dis.write(buffer);
+				}else{
+					
+					b.get(buffer, 0, b.remaining());
+					dis.write(buffer);
+					break;
+					/*
+					for(int i = 0; i < b.remaining();i++){
+						dis.write(b.get(i));
+					}
+					break;
+					*/
+				}
+					
+			}
+			
+			/*
+			byte c = b.get();
+			dis.write(c);		
+			for(int i = 0;i < b.limit();i++)
+				dis.write(b.get(i));
+			*/
 			/*
 			long n = 0;
 			long sum = 0;
