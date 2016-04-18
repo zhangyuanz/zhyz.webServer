@@ -67,14 +67,16 @@ public class FileOpreator {
 			dis.write(buffer, 0, (int) (total % bufferSize));
 			*/
 			FileChannel fc = raf.getChannel();
-			MappedByteBuffer b = fc.map(FileChannel.MapMode.READ_ONLY, start, total);
-			byte[] buffer = new byte[4096];
+			MappedByteBuffer b = fc.map(FileChannel.MapMode.READ_ONLY, start,
+					total);
+			byte[] buffer = new byte[bufferSize];
 			while (true) {
-				if (b.remaining() > 4096) {
+				int remain = b.remaining();
+				if (remain > bufferSize) {
 					b.get(buffer);
 					dis.write(buffer);
 				} else {
-					b.get(buffer, 0, b.remaining());
+					b.get(buffer, 0, remain);
 					dis.write(buffer);
 					break;
 					/*
