@@ -10,7 +10,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.URL;
+import util.URI;
 
 /**
  * 将http请求信息封装打包，以便后续使用
@@ -31,7 +31,7 @@ public class Request implements common.Request {
 	/**
 	 * http请求的资源
 	 */
-	private URL requestURL = null;
+	private URI requestURI = null;
 	/**
 	 * http请求的头部信息
 	 */
@@ -122,7 +122,7 @@ public class Request implements common.Request {
 		int x = firstLine.indexOf('/');
 		int y = firstLine.lastIndexOf('/');
 		this.setMethod(firstLine.substring(0, x - 1));
-		this.setRequestURL(new URL(firstLine.substring(x, y - 5)));
+		this.setRequestURL(new URI(firstLine.substring(x, y - 5)));
 		this.setProtocol(firstLine.substring(y - 4, firstLine.length()));
 	}
 
@@ -162,16 +162,16 @@ public class Request implements common.Request {
 	 * @return the requestURL
 	 */
 	@Override
-	public URL getRequestURL() {
-		return requestURL;
+	public URI getRequestURI() {
+		return requestURI;
 	}
 
 	/**
 	 * @param requestURL
 	 *            the requestURL to set
 	 */
-	private void setRequestURL(URL requestURL) {
-		this.requestURL = requestURL;
+	private void setRequestURL(URI requestURI) {
+		this.requestURI = requestURI;
 	}
 
 	@Override

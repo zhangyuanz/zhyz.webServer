@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import util.URL;
+import util.URI;
 
 public class URLTest {
-	private URL url1 = new URL("/d/temp.jpg");
-	private URL url2 = new URL();
-	private URL url3 = new URL("/");
+	private URI url1 = new URI("/d/temp.jpg");
+	private URI url2 = new URI();
+	private URI url3 = new URI("/");
 
 	@Test
 	public void testGetString() {

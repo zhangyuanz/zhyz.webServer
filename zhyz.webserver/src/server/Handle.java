@@ -11,7 +11,7 @@ import expection.IllegalStringTypeException;
 import expection.MethodError;
 import util.FileOpreator;
 import util.Tool;
-import util.URL;
+import util.URI;
 
 /**
  * 该类是完成逻辑控制，业务流程处理，实现runable接口，专门执行逻辑任务
@@ -61,25 +61,25 @@ public class Handle implements Runnable {
 			throw new MethodError("非GET方法");
 		}
 
-		URL url = request.getRequestURL();
-		if (url == null) {
+		URI uri = request.getRequestURI();
+		if (uri == null) {
 			//此情况是用户只输入了主机，没有输入url，应该为用户显示index.html
 			logger.info("请求的url是null！");
 			return;
 		}
 		// favicon.ico
-		if (url.getString().equals(Config.SERVER_TAG)) {
+		if (uri.getString().equals(Config.SERVER_TAG)) {
 			downloadFile(new File(Config.ROOT_PATH + Config.SERVER_TAG));
 			return;
 		}
 
 		// 非根目录,没有访问权限
-		if (!url.getRoot().equals(Config.ROOT)) {
+		if (!uri.getRoot().equals(Config.ROOT)) {
 			logger.info("用户试图访问非根目录资源");
 			warning("没有权限");
 			return;
 		} else {
-			doLegalUrl(url);
+			doLegalUrl(uri);
 		}
 	}
 
@@ -89,7 +89,7 @@ public class Handle implements Runnable {
 	 * @param url
 	 * @throws IOException 
 	 */
-	private void doLegalUrl(URL url) throws IOException {
+	private void doLegalUrl(URI url) throws IOException {
 		String path = url.toPath();
 		logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
 		File file = new File(path);

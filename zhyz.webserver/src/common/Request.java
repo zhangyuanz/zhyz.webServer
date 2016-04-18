@@ -2,7 +2,7 @@ package common;
 
 import java.util.HashMap;
 
-import util.URL;
+import util.URI;
 
 public interface Request {
 	/**
@@ -24,7 +24,7 @@ public interface Request {
 	 * 
 	 * @return
 	 */
-	public URL getRequestURL();
+	public URI getRequestURI();
 
 	/**
 	 * 获取请求的头信息

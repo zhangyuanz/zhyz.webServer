@@ -9,15 +9,15 @@ import server.Config;
  * @author Administrator
  *
  */
-public class URL {
-	private String url;
+public class URI {
+	private String uri;
 
-	public URL() {
-		this.url = null;
+	public URI() {
+		this.uri = null;
 	}
 
-	public URL(String str) {
-		this.url = str;
+	public URI(String str) {
+		this.uri = str;
 	}
 
 	/**
@@ -26,8 +26,8 @@ public class URL {
 	 * @return
 	 */
 	public String getString() {
-		if (url != null)
-			return url.substring(1, url.length());
+		if (uri != null)
+			return uri.substring(1, uri.length());
 		return null;
 	}
 
@@ -36,10 +36,10 @@ public class URL {
 	 * 
 	 */
 	public String getRoot() {
-		if (url == null)
+		if (uri == null)
 			return null;
-		if (url.length() >= 2)
-			return url.substring(1, 2);
+		if (uri.length() >= 2)
+			return uri.substring(1, 2);
 		else
 			return Config.ROOT;
 
@@ -59,17 +59,17 @@ public class URL {
 	 * @param url是http请求经过封装的url
 	 */
 	public String toPath() {
-		if (url == null)
+		if (uri == null)
 			return null;
-		if (url.length() == 1)
+		if (uri.length() == 1)
 			// url是"/"
 			return Config.ROOT_PATH;
-		if (url.length() == 2)
+		if (uri.length() == 2)
 			// url是"/d"
 			return Config.ROOT_PATH;
-		if (url.length() >= 3)
+		if (uri.length() >= 3)
 			// url是"/d/"或者更长
-			return Config.ROOT_PATH + url.substring(3, url.length());
+			return Config.ROOT_PATH + uri.substring(3, uri.length());
 
 		return null;
 	}
