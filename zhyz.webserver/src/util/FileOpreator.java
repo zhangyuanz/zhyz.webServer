@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class FileOpreator {
 	final static Logger logger = LoggerFactory.getLogger(FileOpreator.class);
-
+	final static int bufferSize = 4096;
 	/**
 	 * 将文件部分内容以自由读写方式，通过DataOutputStream形式写入输出流
 	 * 
@@ -53,6 +53,29 @@ public class FileOpreator {
 			dis = new DataOutputStream(os);
 			raf.seek(start);
 			long total = end - start;
+			//经调查研究，read(b)原则上每次一定会读满，返回值等于b的长度，只是在文件末尾时，可能读不满，返回实际读的长度，如果恰巧最后一次也读满，则再次读取会返回-1
+			//误区：以为每次read的时候都有可能得到小于b长度的返回值，而实际上只有到达文件末尾时，才有能出现小于b长度的返回值
+			byte[] buffer = new byte[bufferSize];
+			int readTimes = (int) (total / bufferSize);
+			for (int i = 0; i < readTimes; i++) {
+				raf.read(buffer);
+				dis.write(buffer);
+			}
+			raf.read(buffer);
+			dis.write(buffer, 0, (int) (total % bufferSize));
+			/*
+			long n = 0;
+			long sum = 0;
+			while((n = raf.read(buffer)) != -1){
+				sum = sum + n;
+				dis.write(buffer);
+				if(sum + 4096 >total){}
+					break;
+			}
+			int readBytes = raf.read(buffer);
+			System.out.println("readBytes:"+readBytes);
+			dis.write(buffer, 0, (int) (total - sum));
+			*/
 			/*
 			 * 20160415-am-11:40
 			 * issues：read(b),read(b,off,len)方法返回int代表实际读取的字节数，也就是说在一开始，无法确定读取的字节数
@@ -69,6 +92,7 @@ public class FileOpreator {
 					break;
 			}
 			 */
+			/*
 			int b = 0;
 			int sum = 0;
 			while(b!=-1){
@@ -78,7 +102,7 @@ public class FileOpreator {
 				if(sum == total)
 					break;
 			}
-
+			*/
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
@@ -114,13 +138,11 @@ public class FileOpreator {
 			in = new FileInputStream(file);
 			fcin = in.getChannel();
 			dis = new DataOutputStream(os);
-			ByteBuffer buffer = ByteBuffer.allocate(1024);
-
+			ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
 			while (fcin.read(buffer) != -1) {
 				dis.write(buffer.array());
 				buffer.clear();
 			}
-
 			return true;
 		} catch (IOException e) {
 			logger.error(e.getLocalizedMessage());
