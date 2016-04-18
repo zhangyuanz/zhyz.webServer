@@ -2,11 +2,13 @@ package junt4;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import org.junit.Test;
@@ -55,18 +57,21 @@ public class FileOpreatorTest {
 		File file = new File("D:/test.txt");
 		File test = new File("D:/test2.txt");
 		OutputStream os = new FileOutputStream(test);
-		FileOpreator.file2OutputStream(file, 0, 20, os);
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				new FileInputStream(test)));
+		FileOpreator.file2OutputStream(file, 0, 12, os);
 		System.out.println();
-		FileOpreator.file2OutputStream(file, 20, 114, os);
+		String body1 = br.readLine();
+		System.out.println(body1);
+		FileOpreator.file2OutputStream(file, 12, 114, os);
 		System.out.println();
-		DataInputStream dis = new DataInputStream(new FileInputStream(test));
-		byte[] buffer = new byte[114];
-		dis.read(buffer);
+		String body2 = br.readLine();
+		System.out.println(body2);
 
-		dis.close();
+		br.close();
 		os.close();
 
-		String text = new String(buffer);
+		String text = body1.substring(0, 4) + body2.substring(0, 42);
 		String expect = "﻿这是一个测试用的文本，是为了测试java基础练习题一的file2buf函数的实现而存在的。";
 		System.out.println(text);
 		assertEquals(expect, text);

@@ -69,12 +69,11 @@ public class FileOpreator {
 			FileChannel fc = raf.getChannel();
 			MappedByteBuffer b = fc.map(FileChannel.MapMode.READ_ONLY, start, total);
 			byte[] buffer = new byte[4096];
-			while(true){
-				if(b.remaining() > 4096){
+			while (true) {
+				if (b.remaining() > 4096) {
 					b.get(buffer);
 					dis.write(buffer);
-				}else{
-					
+				} else {
 					b.get(buffer, 0, b.remaining());
 					dis.write(buffer);
 					break;
@@ -85,7 +84,6 @@ public class FileOpreator {
 					break;
 					*/
 				}
-					
 			}
 			
 			/*
