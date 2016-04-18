@@ -97,7 +97,7 @@ public class Request implements common.Request {
 			while (true) {
 				headLine = in.readLine();
 				logger.info(headLine);
-				if (headLine.isEmpty() || headLine == null) {
+				if (headLine == null || headLine.isEmpty()) {
 					break;
 				}
 				String key = headLine.substring(0, headLine.indexOf(':'));

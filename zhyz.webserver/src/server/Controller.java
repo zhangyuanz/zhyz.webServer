@@ -30,7 +30,7 @@ public class Controller {
 			while (true) {
 				command = reader.readLine();
 				if (!command.equals("start") && !command.equals("exit")) {
-					logger.info("非指令输入！启动请输入start，关闭请输入exit。");
+					System.out.println("非指令输入！启动请输入start，关闭请输入exit。");
 				}
 				if (command.equals("start")) {
 					if (httpServer == null) {

@@ -57,12 +57,13 @@ public class Handle implements Runnable {
 	 * 
 	 */
 	private void handle() throws MethodError, IOException {
-		if (request.getMethod() != null && !(request.getMethod().equals("GET"))) {
+		if (request.getMethod() == null || !request.getMethod().equals("GET")) {
 			throw new MethodError("非GET方法");
 		}
 
 		URL url = request.getRequestURL();
 		if (url == null) {
+			//此情况是用户只输入了主机，没有输入url，应该为用户显示index.html
 			logger.info("请求的url是null！");
 			return;
 		}
@@ -78,7 +79,7 @@ public class Handle implements Runnable {
 			warning("没有权限");
 			return;
 		} else {
-			doLegal(url);
+			doLegalUrl(url);
 		}
 	}
 
@@ -88,7 +89,7 @@ public class Handle implements Runnable {
 	 * @param url
 	 * @throws IOException 
 	 */
-	private void doLegal(URL url) throws IOException {
+	private void doLegalUrl(URL url) throws IOException {
 		String path = url.toPath();
 		logger.info("访问路劲（本机windows能够接受的路劲）:" + path);
 		File file = new File(path);
@@ -130,7 +131,6 @@ public class Handle implements Runnable {
 			downloadFile(file);
 			return;
 		} else {
-
 			long start = 0;
 			long end = 0;
 			try {
@@ -154,7 +154,7 @@ public class Handle implements Runnable {
 	}
 
 	/**
-	 * 判断一个文件时候为图片文件
+	 * 判断一个文件是否为图片文件
 	 * 
 	 * @param name
 	 * @return
@@ -323,15 +323,15 @@ public class Handle implements Runnable {
 		setKeepAlive(pw);
 		pw.println();
 		pw.println("<a href='javascript:history.go(-1)'>返回上级</a><br>");
-		String parentPath = file.getPath().replace('\\', '/') + '/';
-		for (String name : file.list()) {
+		//String parentPath = file.getPath().replace('\\', '/') + '/';
+		for (File child : file.listFiles()) {
 			pw.print("<a href='");
-			pw.print(name);
+			pw.print(child.getName());
 			pw.print("/'><font ");
-			if (new File(parentPath+name).isDirectory())
+			if (child.isDirectory())
 				pw.print(" color = 'red'");
 			pw.print('>');
-			pw.print(name);
+			pw.print(child.getName());
 			pw.print("</font>");
 			pw.print("</a><br>");
 			pw.println();
