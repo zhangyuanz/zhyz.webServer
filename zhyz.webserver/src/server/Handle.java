@@ -227,7 +227,7 @@ public class Handle implements Runnable {
 	private void downloadFile(File file, long start, long end) throws IOException {
 		PrintStream pw = response.getPrintStream();
 		logger.info("开始download文件的一部分" + file.getName());
-		pw.println("HTTP/1.1 200 OK");
+		pw.println("HTTP/1.1 206 Partial Content");
 
 		pw.print("Content-Disposition:attachment;filename=");
 		pw.println(file.getName());
